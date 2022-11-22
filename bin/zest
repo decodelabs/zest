@@ -1,0 +1,31 @@
+#!/usr/bin/env php
+<?php
+/**
+ * @package Zest
+ * @license http://opensource.org/licenses/MIT
+ */
+
+declare(strict_types=1);
+
+namespace DecodeLabs\Zest;
+
+use DecodeLabs\Archetype;
+use DecodeLabs\Genesis;
+use DecodeLabs\Clip\Hub;
+use DecodeLabs\Clip\Task as TaskInterface;
+use DecodeLabs\Zest\Task;
+
+foreach ([
+    __DIR__ . '/../../../autoload.php',
+    __DIR__ . '/vendor/autoload.php',
+    __DIR__ . '/../vendor/autoload.php'
+] as $file) {
+    if (file_exists($file)) {
+        require $file;
+        break;
+    }
+}
+
+
+Archetype::extend(TaskInterface::class, Task::class);
+Genesis::run(Hub::class);
