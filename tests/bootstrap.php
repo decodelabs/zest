@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 /**
  * @package Zest
@@ -9,10 +8,11 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Zest;
 
-use DecodeLabs\Archetype;
 use DecodeLabs\Genesis;
 use DecodeLabs\Zest\Hub;
 
-require_once $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
-Genesis::run(Hub::class);
+Genesis::initialize(Hub::class, [
+    'analysis' => true
+]);
