@@ -32,6 +32,7 @@ interface Config
 
     public function getOutDir(): ?string;
     public function getAssetsDir(): ?string;
+    public function getUrlPrefix(): ?string;
 
     public function getEntry(): ?string;
     public function shouldHash(): bool;

@@ -1,0 +1,290 @@
+<?php
+/**
+ * @package Zest
+ * @license http://opensource.org/licenses/MIT
+ */
+
+declare(strict_types=1);
+
+namespace DecodeLabs\Zest;
+
+use DecodeLabs\Atlas;
+use DecodeLabs\Atlas\File;
+use DecodeLabs\Collections\Tree;
+use DecodeLabs\Collections\Tree\NativeMutable as NativeTree;
+
+class Manifest
+{
+    protected File $file;
+    protected File $genFile;
+
+
+    /**
+     * @var array<string, array<string, mixed>>
+     */
+    protected array $headJs = [];
+
+    /**
+     * @var array<string, array<string, mixed>>
+     */
+    protected array $bodyJs = [];
+
+    /**
+     * @var array<string, array<string, mixed>>
+     */
+    protected array $css = [];
+
+
+    /**
+     * Load manifest in production mode
+     */
+    public static function load(
+        string|File $file
+    ): static {
+        if (!$file instanceof File) {
+            $file = Atlas::file($file);
+        }
+
+        $genFile = Atlas::file((string)$file . '.php');
+
+        if (!$genFile->exists()) {
+            return new static($file);
+        }
+
+        return require $genFile;
+    }
+
+    final public function __construct(string|File $file)
+    {
+        if (!$file instanceof File) {
+            $file = Atlas::file($file);
+        }
+
+        $this->file = $file;
+        $this->genFile = Atlas::file((string)$file . '.php');
+    }
+
+
+
+    /**
+     * Add head JS files
+     *
+     * @param array<string, array<string, mixed>> $files
+     * @return $this
+     */
+    public function addHeadJs(array $files): static
+    {
+        foreach ($files as $file => $attrs) {
+            $this->headJs[$file] = $attrs;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get head JS attributes
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function getHeadJsData(): array
+    {
+        return $this->headJs;
+    }
+
+    /**
+     * Add body JS files
+     *
+     * @param array<string, array<string, mixed>> $files
+     * @return $this
+     */
+    public function addBodyJs(array $files): static
+    {
+        foreach ($files as $file => $attrs) {
+            $this->bodyJs[$file] = $attrs;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get body JS attributes
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function getBodyJsData(): array
+    {
+        return $this->bodyJs;
+    }
+
+    /**
+     * Add CSS files
+     *
+     * @param array<string, array<string, mixed>> $files
+     * @return $this
+     */
+    public function addCss(array $files): static
+    {
+        foreach ($files as $file => $attrs) {
+            $this->css[$file] = $attrs;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get CSS attributes
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function getCssData(): array
+    {
+        return $this->css;
+    }
+
+
+    /**
+     * Load json data
+     *
+     * @return Tree<mixed>
+     */
+    public function loadData(): Tree
+    {
+        if (!$this->file->exists()) {
+            $data = [];
+        } else {
+            /** @var array<mixed> */
+            $data = json_decode($this->file->getContents(), true);
+        }
+
+        return new NativeTree($data);
+    }
+
+    /**
+     * Save cache file
+     *
+     * @return $this
+     */
+    public function save(): static
+    {
+        if (
+            empty($this->headJs) &&
+            empty($this->bodyJs) &&
+            empty($this->css)
+        ) {
+            return $this;
+        }
+
+        $output =
+            '<?php' . "\n\n" .
+            'namespace DecodeLabs\\Zest\\Cache;' . "\n\n" .
+            'use DecodeLabs\\Zest\\Manifest;' . "\n\n" .
+            '/* Auto-generated Zest manifest cache file */' . "\n" .
+            'return (new Manifest(__DIR__.\'/manifest.json\'))' . "\n";
+
+        if (!empty($this->headJs)) {
+            $output .= '->addHeadJs(' . var_export($this->headJs, true) . ')' . "\n";
+        }
+
+        if (!empty($this->bodyJs)) {
+            $output .= '->addBodyJs(' . var_export($this->bodyJs, true) . ')' . "\n";
+        }
+
+        if (!empty($this->css)) {
+            $output .= '->addCss(' . var_export($this->css, true) . ')' . "\n";
+        }
+
+        $output .= ';';
+
+        $this->genFile->putContents($output);
+        return $this;
+    }
+
+
+    /**
+     * Generate production manifest
+     */
+    public static function generateProduction(
+        string|File $file,
+        Config $config
+    ): static {
+        if (!$file instanceof File) {
+            $file = Atlas::file($file);
+        }
+
+        $output = (new static($file));
+
+        $output->headJs = [];
+        $output->bodyJs = [];
+        $output->css = [];
+
+        if (!$output->file->exists()) {
+            return $output;
+        }
+
+        $data = $output->loadData();
+        $prefix = trim((string)$config->getUrlPrefix(), '/');
+
+
+        foreach ($data as $file) {
+            // JS
+            if ($file['isEntry']) {
+                $output->bodyJs[$prefix . '/' . $file['file']] = static::getJsFileAttrs((string)$file['file']);
+            }
+
+            // CSS
+            if (isset($file->css)) {
+                foreach ($file->css as $cssFile) {
+                    $output->css[$prefix . '/' . $cssFile->getValue()] = [];
+                }
+            }
+        }
+
+        $output->save();
+        return $output;
+    }
+
+    /**
+     * Generate dev manifest
+     */
+    public static function generateDev(
+        string|File $file,
+        Config $config
+    ): static {
+        if (!$file instanceof File) {
+            $file = Atlas::file($file);
+        }
+
+        $url = $config->shouldUseHttps() ? 'https' : 'http';
+        $url .= '://' . $config->getHost() . ':' . $config->getPort();
+
+        $output = new static($file);
+        $entry = $config->getEntry() ?? 'src/main.js';
+
+        $output->addHeadJs([
+            $url . '/@vite/client' => static::getJsFileAttrs('@vite/client')
+        ]);
+
+        $output->addBodyJs([
+            $url . '/' . $entry => static::getJsFileAttrs($entry)
+        ]);
+
+        $output->save();
+        return $output;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected static function getJsFileAttrs(string $file): array
+    {
+        $output = [];
+
+        if (false !== strpos($file, '-legacy')) {
+            $output['nomodule'] = true;
+        } else {
+            $output['type'] = 'module';
+        }
+
+        return $output;
+    }
+}

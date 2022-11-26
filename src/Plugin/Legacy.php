@@ -31,7 +31,8 @@ class Legacy implements Plugin
     public function getDevPackages(): array
     {
         return [
-            '@vitejs/plugin-legacy' => '^2.3'
+            '@vitejs/plugin-legacy' => '^2.3',
+            'terser' => null
         ];
     }
 

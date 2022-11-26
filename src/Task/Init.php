@@ -23,7 +23,7 @@ class Init implements Task
             return false;
         }
 
-        if (!Zest::run('generate-package-config', '--no-install',)) {
+        if (!Zest::run('generate-package-config', '--no-install', )) {
             return false;
         }
 
@@ -35,6 +35,6 @@ class Init implements Task
             return false;
         }
 
-        return true;
+        return Zest::run('dev');
     }
 }

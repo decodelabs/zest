@@ -41,6 +41,9 @@ class Template extends FileTemplate
 
             case 'assetsDir':
                 return $this->controller->config->getAssetsDir() ?? 'assets';
+
+            case 'entry':
+                return $this->controller->config->getEntry() ?? 'src/main.js';
         }
 
         return parent::generateSlot($name);

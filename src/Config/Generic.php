@@ -113,6 +113,14 @@ class Generic implements Config
     }
 
     /**
+     * Get url prefix
+     */
+    public function getUrlPrefix(): ?string
+    {
+        return $this->data->urlPrefix->as('?string');
+    }
+
+    /**
      * Get main entry file
      */
     public function getEntry(): ?string

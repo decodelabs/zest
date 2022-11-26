@@ -11,6 +11,7 @@ namespace DecodeLabs\Zest\Task;
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Terminus;
 use DecodeLabs\Zest;
+use DecodeLabs\Zest\Manifest;
 
 class Build implements Task
 {
@@ -21,6 +22,21 @@ class Build implements Task
         Terminus::info('Building assets');
         Terminus::newLine();
 
-        return Zest::$package->runScript('build');
+        if (!Zest::$package->runScript('build')) {
+            return false;
+        }
+
+        Terminus::newLine();
+        $this->buildManifest();
+        return true;
+    }
+
+    protected function buildManifest(): void
+    {
+        $file = Zest::$package->rootDir->getDir(
+            Zest::$config->getOutDir() ?? 'dist'
+        )->getFile('manifest.json');
+
+        Manifest::generateProduction($file, Zest::$config);
     }
 }

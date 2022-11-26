@@ -43,10 +43,13 @@ class ZestTemplate extends Template
                 return Cli::ask('Where should your builds go?', 'dist');
 
             case 'https':
-                return Cli::confirm('Should vite use HTTPS?', true) ? 'true' : 'false';
+                return Cli::confirm('Should vite use HTTPS?', false) ? 'true' : 'false';
 
             case 'assetsDir':
                 return Cli::ask('Where should your assets go within builds?', 'assets');
+
+            case 'urlPrefix':
+                return Cli::ask('What url prefix should production paths use?');
 
             case 'entry':
                 return Cli::ask('What is your main entry file?', 'src/main.js');

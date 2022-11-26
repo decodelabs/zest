@@ -9,6 +9,7 @@ return [
     'https' => {{ https }},
     'outDir' => '{{ outDir }}',
     'assetsDir' => '{{ assetsDir }}',
+    'urlPrefix' => '{{ urlPrefix }}',
     'entry' => '{{ entry }}',
     'hash' => {{ hash }},
     'plugins' => {{ plugins }},

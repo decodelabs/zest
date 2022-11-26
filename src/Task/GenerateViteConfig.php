@@ -14,6 +14,7 @@ use DecodeLabs\Clip\Task\GenerateFileTrait;
 use DecodeLabs\Overpass;
 use DecodeLabs\Zest;
 use DecodeLabs\Zest\Task\GenerateViteConfig\ViteTemplate;
+use DecodeLabs\Zest\Template;
 
 class GenerateViteConfig implements Task
 {
@@ -33,6 +34,17 @@ class GenerateViteConfig implements Task
 
     protected function afterFileSave(File $file): bool
     {
+        // Ensure index.html exists
+        $index = Overpass::$rootDir->getFile('index.html');
+
+        if (!$index->exists()) {
+            (new Template(
+                Zest::getController(),
+                __DIR__ . '/GenerateViteConfig/index.template'
+            ))
+                ->saveTo($index);
+        }
+
         return true;
     }
 }
