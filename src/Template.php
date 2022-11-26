@@ -37,7 +37,7 @@ class Template extends FileTemplate
                     $this->getDefaultPort();
 
             case 'base':
-                $output = '/'.trim((string)$this->controller->config->getUrlPrefix()).'/';
+                $output = '/' . trim((string)$this->controller->config->getUrlPrefix()) . '/';
 
                 if ($output === '//') {
                     $output = '/';
@@ -46,7 +46,7 @@ class Template extends FileTemplate
 
             case 'origin':
                 $output = $this->controller->config->shouldUseHttps() ? 'https' : 'http';
-                $output .= '://'.$this->getSlot('host').':'.$this->getSlot('port');
+                $output .= '://' . $this->getSlot('host') . ':' . $this->getSlot('port');
                 return $output;
 
             case 'outDir':
