@@ -1,0 +1,42 @@
+{
+    "name": "decodelabs/zest",
+    "description": "Vite front end dev environment integration",
+    "type": "library",
+    "keywords": ["vite", "frontend"],
+    "license": "MIT",
+    "authors": [{
+        "name": "Tom Wright",
+        "email": "tom@inflatablecookie.com"
+    }],
+    "require": {
+        "php": "^8.0",
+
+        "decodelabs/archetype": "^0.2.10",
+        "decodelabs/clip": "^0.3.2",
+        "decodelabs/collections": "^0.8.1",
+        "decodelabs/exceptional": "^0.4.3",
+        "decodelabs/genesis": "^0.7.1",
+        "decodelabs/overpass": "^0.2",
+        "decodelabs/systemic": "^0.10.2",
+        "decodelabs/terminus": "^0.9.3"
+    },
+    "require-dev": {
+        "ext-pcntl": "*",
+
+        "decodelabs/glitch": "^0.18.5",
+        "decodelabs/phpstan-decodelabs": "^0.6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "DecodeLabs\\Zest\\": "src/"
+        }
+    },
+    "bin": [
+        "bin/zest"
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "0.1.x-dev"
+        }
+    }
+}

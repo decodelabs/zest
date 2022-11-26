@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Configure your Zest environment here
+ */
+return [
+    'host' => '{{ host }}',
+    'port' => {{ port }},
+    'https' => {{ https }},
+    'outDir' => '{{ outDir }}',
+    'assetsDir' => '{{ assetsDir }}',
+    'urlPrefix' => '{{ urlPrefix }}',
+    'entry' => '{{ entry }}',
+    'hash' => {{ hash }},
+    'plugins' => {{ plugins }},
+];
