@@ -36,6 +36,19 @@ class Template extends FileTemplate
                 return Coercion::toStringOrNull($this->controller->config->getPort()) ??
                     $this->getDefaultPort();
 
+            case 'base':
+                $output = '/'.trim((string)$this->controller->config->getUrlPrefix()).'/';
+
+                if ($output === '//') {
+                    $output = '/';
+                }
+                return $output;
+
+            case 'origin':
+                $output = $this->controller->config->shouldUseHttps() ? 'https' : 'http';
+                $output .= '://'.$this->getSlot('host').':'.$this->getSlot('port');
+                return $output;
+
             case 'outDir':
                 return $this->controller->config->getOutDir() ?? 'dist';
 

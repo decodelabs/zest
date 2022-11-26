@@ -45,6 +45,7 @@ class ViteTemplate extends Template
         $data = new NativeTree([
             'plugins' => '{{ plugins }}',
             'root' => $this->getSlot('root'),
+            'base' => $this->getSlot('base'),
             'build' => [
                 'outDir' => $this->getSlot('outDir'),
                 'assetsDir' => $this->getSlot('assetsDir'),
@@ -56,6 +57,7 @@ class ViteTemplate extends Template
                 'port' => Coercion::toInt($this->getSlot('port')),
                 'https' => $this->controller->config->shouldUseHttps(),
                 'strictPort' => true,
+                'origin' => $this->getSlot('origin'),
                 'hmr' => [
                     'protocol' => 'ws',
                     'host' => $this->getSlot('host')
