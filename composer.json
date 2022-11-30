@@ -17,7 +17,6 @@
         "decodelabs/exceptional": "^0.4.3",
         "decodelabs/genesis": "^0.7.1",
         "decodelabs/overpass": "^0.2",
-        "decodelabs/systemic": "^0.10.2",
         "decodelabs/terminus": "^0.9.3"
     },
     "require-dev": {
