@@ -1,3 +1,4 @@
+## v0.1.3 (2022-12-12)
 * Added manifest hook for when CSS code splitting is off
 
 ## v0.1.2 (2022-12-12)
