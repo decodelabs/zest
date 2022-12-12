@@ -236,7 +236,7 @@ class Manifest
 
         $data = $output->loadData();
         $prefix = trim((string)$config->getUrlPrefix(), '/');
-
+        $styles = [];
 
         foreach ($data as $file) {
             // JS
@@ -249,7 +249,17 @@ class Manifest
                 foreach ($file->css as $cssFile) {
                     $output->css[$prefix . '/' . $cssFile->getValue()] = [];
                 }
+            } elseif (str_ends_with((string)$file['src'], '.css')) {
+                $styles[$prefix . '/' . $file['file']] = [];
             }
+        }
+
+        // CSS code splitting turned off
+        if (
+            empty($output->css) &&
+            !empty($styles)
+        ) {
+            $output->css = $styles;
         }
 
         $output->save();
