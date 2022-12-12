@@ -55,6 +55,9 @@ class Template extends FileTemplate
             case 'assetsDir':
                 return $this->controller->config->getAssetsDir() ?? 'assets';
 
+            case 'publicDir':
+                return $this->controller->config->getPublicDir() ?? 'public';
+
             case 'entry':
                 return $this->controller->config->getEntry() ?? 'src/main.js';
         }
