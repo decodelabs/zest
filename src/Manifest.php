@@ -34,6 +34,8 @@ class Manifest
      */
     protected array $css = [];
 
+    protected bool $hot = false;
+
 
     /**
      * Load manifest in production mode
@@ -54,14 +56,17 @@ class Manifest
         return require $genFile;
     }
 
-    final public function __construct(string|File $file)
-    {
+    final public function __construct(
+        string|File $file,
+        bool $hot = false
+    ) {
         if (!$file instanceof File) {
             $file = Atlas::file($file);
         }
 
         $this->file = $file;
         $this->genFile = Atlas::file((string)$file . '.php');
+        $this->hot = $hot;
     }
 
 
@@ -141,6 +146,14 @@ class Manifest
         return $this->css;
     }
 
+    /**
+     * Is manifest for dev mode?
+     */
+    public function isHot(): bool
+    {
+        return $this->hot;
+    }
+
 
     /**
      * Load json data
@@ -179,7 +192,7 @@ class Manifest
             'namespace DecodeLabs\\Zest\\Cache;' . "\n\n" .
             'use DecodeLabs\\Zest\\Manifest;' . "\n\n" .
             '/* Auto-generated Zest manifest cache file */' . "\n" .
-            'return (new Manifest(__DIR__.\'/manifest.json\'))' . "\n";
+            'return (new Manifest(__DIR__.\'/manifest.json\', ' . ($this->hot ? 'true' : 'false') . '))' . "\n";
 
         if (!empty($this->headJs)) {
             $output .= '->addHeadJs(' . var_export($this->headJs, true) . ')' . "\n";
@@ -257,7 +270,7 @@ class Manifest
         $url = $config->shouldUseHttps() ? 'https' : 'http';
         $url .= '://' . $config->getHost() . ':' . $config->getPort();
 
-        $output = new static($file);
+        $output = new static($file, true);
         $entry = $config->getEntry() ?? 'src/main.js';
 
         $output->addHeadJs([

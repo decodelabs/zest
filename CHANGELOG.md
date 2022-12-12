@@ -1,4 +1,5 @@
 * Added publicDir config
+* Added isHot flag to manifest
 
 ## v0.1.1 (2022-11-30)
 * Removed Systemic dependency
