@@ -9,7 +9,7 @@
 
 ### Vite front end dev environment integration
 
-Zest provides ...
+Zest provides a simplified and opinionated PHP oriented entry point to the Vite development environment.
 
 _Get news and updates on the [DecodeLabs blog](https://blog.decodelabs.com)._
 
@@ -25,7 +25,7 @@ composer require decodelabs/zest
 
 ## Usage
 
-Zest aims to provide a simple automated entry point to using the [Vite](https://vitejs.dev/) dev server.
+Zest aims to provide a simple automated way to integrate the [Vite](https://vitejs.dev/) dev server into your PHP application.
 
 All terminal commands assume you have [Effigy](https://github.com/decodelabs/effigy) installed and working.
 
