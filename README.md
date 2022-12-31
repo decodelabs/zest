@@ -3,7 +3,7 @@
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/decodelabs/zest?style=flat)](https://packagist.org/packages/decodelabs/zest)
 [![Latest Version](https://img.shields.io/packagist/v/decodelabs/zest.svg?style=flat)](https://packagist.org/packages/decodelabs/zest)
 [![Total Downloads](https://img.shields.io/packagist/dt/decodelabs/zest.svg?style=flat)](https://packagist.org/packages/decodelabs/zest)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/decodelabs/zest/Integrate)](https://github.com/string|int|floatdecodelabs/zest/actions/workflows/integrate.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/decodelabs/zest/integrate.yml?branch=develop)](https://github.com/string|int|floatdecodelabs/zest/actions/workflows/integrate.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-44CC11.svg?longCache=true&style=flat)](https://github.com/phpstan/phpstan)
 [![License](https://img.shields.io/packagist/l/decodelabs/zest?style=flat)](https://packagist.org/packages/decodelabs/zest)
 
