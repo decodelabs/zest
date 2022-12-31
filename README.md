@@ -87,8 +87,8 @@ return [
 
 ### View consumption
 
-To make use of Zest, you will need to consume the assest from the manifest.
-As it stands, there are no pre-build view adapters (there are many different view libraries out there!!), however you can adapt the one you use like this:
+To make use of Zest, you will need to consume the generated assets from the manifest in your views.
+As it stands, there are no pre-built view adapters (there are many different view libraries out there!!), however you can adapt the one you use like this:
 
 ```php
 use DecodeLabs\Genesis;
