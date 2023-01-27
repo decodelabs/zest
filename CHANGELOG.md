@@ -1,3 +1,4 @@
+## v0.1.5 (2023-01-27)
 * Made manifest files ECS compliant
 
 ## v0.1.4 (2023-01-27)
