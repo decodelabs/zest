@@ -195,21 +195,50 @@ class Manifest
             'return (new Manifest(__DIR__.\'/manifest.json\', ' . ($this->hot ? 'true' : 'false') . '))' . "\n";
 
         if (!empty($this->headJs)) {
-            $output .= '->addHeadJs(' . var_export($this->headJs, true) . ')' . "\n";
+            $output .= '    ->addHeadJs(' . $this->exportArray($this->headJs) . ')' . "\n";
         }
 
         if (!empty($this->bodyJs)) {
-            $output .= '->addBodyJs(' . var_export($this->bodyJs, true) . ')' . "\n";
+            $output .= '    ->addBodyJs(' . $this->exportArray($this->bodyJs) . ')' . "\n";
         }
 
         if (!empty($this->css)) {
-            $output .= '->addCss(' . var_export($this->css, true) . ')' . "\n";
+            $output .= '    ->addCss(' . $this->exportArray($this->css) . ')' . "\n";
         }
 
         $output .= ';';
 
         $this->genFile->putContents($output);
         return $this;
+    }
+
+    /**
+     * Convert array to string neatly
+     *
+     * @param array<mixed> $array
+     */
+    protected function exportArray(
+        array $array,
+        int $level = 1
+    ): string {
+        $output = '[';
+
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->exportArray($value, $level + 1);
+            } else {
+                $value = var_export($value, true);
+            }
+
+            $output .= "\n    " . var_export($key, true) . ' => ' . $value . ',';
+        }
+
+        if (count($array) > 0) {
+            $output .= "\n";
+        }
+
+        $output .= ']';
+        return str_replace("\n", "\n    ", $output);
     }
 
 
