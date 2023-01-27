@@ -1,3 +1,4 @@
+## v0.1.4 (2023-01-27)
 * Export neat arrays in manifest files
 
 ## v0.1.3 (2022-12-12)
