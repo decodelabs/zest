@@ -1,3 +1,5 @@
+* Made manifest files ECS compliant
+
 ## v0.1.4 (2023-01-27)
 * Export neat arrays in manifest files
 

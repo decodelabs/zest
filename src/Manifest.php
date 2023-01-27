@@ -192,7 +192,7 @@ class Manifest
             'namespace DecodeLabs\\Zest\\Cache;' . "\n\n" .
             'use DecodeLabs\\Zest\\Manifest;' . "\n\n" .
             '/* Auto-generated Zest manifest cache file */' . "\n" .
-            'return (new Manifest(__DIR__.\'/manifest.json\', ' . ($this->hot ? 'true' : 'false') . '))' . "\n";
+            'return (new Manifest(__DIR__ . \'/manifest.json\', ' . ($this->hot ? 'true' : 'false') . '))' . "\n";
 
         if (!empty($this->headJs)) {
             $output .= '    ->addHeadJs(' . $this->exportArray($this->headJs) . ')' . "\n";
@@ -206,7 +206,7 @@ class Manifest
             $output .= '    ->addCss(' . $this->exportArray($this->css) . ')' . "\n";
         }
 
-        $output .= ';';
+        $output .= ';'."\n";
 
         $this->genFile->putContents($output);
         return $this;
