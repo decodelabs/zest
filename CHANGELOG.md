@@ -1,3 +1,6 @@
+## v0.2.2 (2023-09-11)
+* Fixed dev manifest path issue
+
 ## v0.2.1 (2023-09-11)
 * Updated default vite version to 4
 * Added check for nested public/outDir
