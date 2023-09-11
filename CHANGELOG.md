@@ -1,3 +1,5 @@
+* Updated default vite version to 4
+
 ## v0.2.0 (2023-09-11)
 * Simplified config generation
 * Removed plugins
