@@ -1,5 +1,6 @@
 * Updated default vite version to 4
 * Added check for nested public/outDir
+* Added url prefix in dev manifest
 
 ## v0.2.0 (2023-09-11)
 * Simplified config generation
