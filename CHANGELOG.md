@@ -1,3 +1,9 @@
+## v0.2.0 (2023-09-11)
+* Simplified config generation
+* Removed plugins
+* Improved manifest generation
+* Added config defaults for df-r7
+
 ## v0.1.5 (2023-01-27)
 * Made manifest files ECS compliant
 
