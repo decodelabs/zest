@@ -11,20 +11,20 @@ namespace DecodeLabs\Zest\Config;
 
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Coercion;
-use DecodeLabs\Collections\Tree;
-use DecodeLabs\Collections\Tree\NativeMutable as NativeTree;
+use DecodeLabs\Exceptional;
 use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Controller;
 
-/**
- * @phpstan-type TConfig Tree<string|int|float|null>
- */
 class Generic implements Config
 {
-    /**
-     * @phpstan-var TConfig
-     */
-    protected Tree $data;
+    protected ?string $host = null;
+    protected ?int $port = null;
+    protected ?bool $https = false;
+    protected ?string $outDir = null;
+    protected ?string $assetsDir = null;
+    protected ?string $publicDir = null;
+    protected ?string $urlPrefix = null;
+    protected ?string $entry = null;
 
     protected File $file;
     protected Controller $controller;
@@ -32,7 +32,7 @@ class Generic implements Config
     public function __construct(Controller $controller)
     {
         $this->controller = $controller;
-        $this->file = $controller->package->rootDir->getFile('Zest.php');
+        $this->file = $controller->package->rootDir->getFile('vite.config.js');
         $this->reload();
     }
 
@@ -42,15 +42,82 @@ class Generic implements Config
     public function reload(): void
     {
         if (!$this->file->exists()) {
-            /** @phpstan-ignore-next-line */
-            $this->data = new NativeTree();
             return;
         }
 
-        $data = require (string)$this->file;
-        /** @phpstan-ignore-next-line */
-        $this->data = new NativeTree(Coercion::toArray($data));
+        $conf = $this->file->getContents();
+
+        $this->host = Coercion::toString($this->extractValue($conf, 'host'));
+        $this->port = Coercion::toInt($this->extractValue($conf, 'port'));
+        $this->https = Coercion::toBool($this->extractValue($conf, 'https'));
+        $this->outDir = Coercion::toString($this->extractValue($conf, 'outDir'));
+        $this->assetsDir = Coercion::toString($this->extractValue($conf, 'assetsDir'));
+        $this->publicDir = Coercion::toString($this->extractValue($conf, 'publicDir'));
+        $this->urlPrefix = Coercion::toString($this->extractValue($conf, 'base'));
+        $this->entry = Coercion::toString($this->extractValue($conf, 'input'));
     }
+
+
+    protected function extractValue(
+        string $conf,
+        string $key
+    ): string|int|bool|null {
+        $key = preg_quote($key, '/');
+        $matches = [];
+
+        if (preg_match('/' . $key . ':\s*(?<value>.+?),/', $conf, $matches)) {
+            $value = trim($matches['value']);
+
+            if (
+                substr($value, 0, 1) === "'" ||
+                substr($value, 0, 1) === '"'
+            ) {
+                $value = substr($value, 1, -1);
+            }
+
+            if ($value === 'true') {
+                return true;
+            } elseif ($value === 'false') {
+                return false;
+            } elseif ($value === 'null') {
+                return null;
+            }
+
+            return $value;
+        }
+
+        throw Exceptional::UnexpectedValue(
+            'Unable to extract ' . $key . ' from vite.config.js'
+        );
+    }
+
+
+
+    public function loadDefaults(?string $name = null): void
+    {
+        switch ($name) {
+            case 'df-r7':
+                $this->host = 'localhost';
+                $this->port = rand(3000, 9999);
+                $this->outDir = 'assets/zest';
+                $this->assetsDir = '.';
+                $this->publicDir = 'assets';
+                $this->urlPrefix = '/theme/' . $this->file->getParent()?->getName() . '/';
+                $this->entry = 'src/main.js';
+                break;
+
+            default:
+                $this->host = 'localhost';
+                $this->port = rand(3000, 9999);
+                $this->outDir = 'dist';
+                $this->assetsDir = 'assets';
+                $this->publicDir = 'public';
+                $this->urlPrefix = null;
+                $this->entry = 'src/main.js';
+                break;
+        }
+    }
+
 
 
     /**
@@ -58,7 +125,7 @@ class Generic implements Config
      */
     public function getHost(): ?string
     {
-        return $this->data->host->as('?string');
+        return $this->host;
     }
 
 
@@ -67,7 +134,7 @@ class Generic implements Config
      */
     public function getPort(): ?int
     {
-        return $this->data->port->as('?int');
+        return $this->port;
     }
 
     /**
@@ -75,25 +142,7 @@ class Generic implements Config
      */
     public function shouldUseHttps(): bool
     {
-        return $this->data->https->as('bool');
-    }
-
-    /**
-     * Get plugins list
-     */
-    public function getPlugins(): array
-    {
-        /** @phpstan-ignore-next-line */
-        return $this->data->plugins->getKeys();
-    }
-
-    /**
-     * Get plugins config
-     */
-    public function getPluginConfig(): array
-    {
-        /** @phpstan-ignore-next-line */
-        return $this->data->plugins->toArray();
+        return $this->https ?? false;
     }
 
     /**
@@ -101,7 +150,7 @@ class Generic implements Config
      */
     public function getOutDir(): ?string
     {
-        return $this->data->outDir->as('?string');
+        return $this->outDir;
     }
 
     /**
@@ -109,7 +158,7 @@ class Generic implements Config
      */
     public function getAssetsDir(): ?string
     {
-        return $this->data->assetsDir->as('?string');
+        return $this->assetsDir;
     }
 
     /**
@@ -117,7 +166,7 @@ class Generic implements Config
      */
     public function getPublicDir(): ?string
     {
-        return $this->data->publicDir->as('?string');
+        return $this->publicDir;
     }
 
     /**
@@ -125,7 +174,7 @@ class Generic implements Config
      */
     public function getUrlPrefix(): ?string
     {
-        return $this->data->urlPrefix->as('?string');
+        return $this->urlPrefix;
     }
 
     /**
@@ -133,22 +182,6 @@ class Generic implements Config
      */
     public function getEntry(): ?string
     {
-        return $this->data->entry->as('?string');
-    }
-
-    /**
-     * Should output files contain hash
-     */
-    public function shouldHash(): bool
-    {
-        return $this->data->hash->as('bool');
-    }
-
-    /**
-     * Get custom vite config overrides
-     */
-    public function getViteConfig(): Tree
-    {
-        return $this->data->vite;
+        return $this->entry;
     }
 }

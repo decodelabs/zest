@@ -206,7 +206,7 @@ class Manifest
             $output .= '    ->addCss(' . $this->exportArray($this->css) . ')' . "\n";
         }
 
-        $output .= ';'."\n";
+        $output .= ';' . "\n";
 
         $this->genFile->putContents($output);
         return $this;

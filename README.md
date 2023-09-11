@@ -31,10 +31,10 @@ All terminal commands assume you have [Effigy](https://github.com/decodelabs/eff
 
 ```bash
 cd my-project
-effigy zest init vue legacy
+effigy zest init
 ```
 
-This command will initialise a Zest config file using Vue and Vite Legacy plugins (more to be added shortly), translate that to a vite config file, install everything you initially need in a package.json file and run the dev server. `ctrl+c` to quit the server.
+This command will initialise a Vite config file, install everything you initially need in a package.json file and run the dev server. `ctrl+c` to quit the server.
 
 From then on:
 
@@ -48,41 +48,6 @@ effigy zest build
 
 Build will trigger automatically when the dev server is closed.
 
-
-### Config
-
-Edit the `Zest.php` config file then run `effigy zest init` again to automatically adapt the vite config file.
-
-You can add arbitrary config in the root `config` array.
-
-
-```php
-return [
-    'host' => 'localhost',
-    'port' => 5524, // randomly generate at init
-    'https' => false,
-    'outDir' => 'assets',
-    'assetsDir' => 'zest',
-    'publicDir' => 'assets',
-    'urlPrefix' => 'my-theme/',
-    'entry' => 'src/main.js',
-    'hash' => false,
-    'plugins' => [
-        'vue' => null,
-        'sass' => null,
-        'legacy' => [
-            'targets' => ['defaults', 'not IE 11'],
-        ],
-    ],
-    'config' => [
-        // custom config here
-        'build' => [
-            'emptyOutDir' => false,
-            'cssCodeSplit' => false
-        ]
-    ]
-];
-```
 
 
 ### View consumption

@@ -1,7 +1,50 @@
-import {
-    defineConfig
-} from 'vite'
-{{ pluginImports }}
+import { defineConfig } from 'vite';
+import path from 'path';
 
 // https://vitejs.dev/config/
-export default defineConfig({{ config }})
+export default defineConfig({
+    plugins: [],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './src'),
+            vue: 'vue/dist/vue.esm-bundler.js',
+        }
+    },
+
+    base: '{{ urlPrefix }}',
+    publicDir: '{{ publicDir }}',
+
+    build: {
+        outDir: '{{ outDir }}',
+        assetsDir: '{{ assetsDir }}',
+        copyPublicDir: false,
+        cssCodeSplit: false,
+        manifest: true,
+        rollupOptions: {
+            input: '{{ entry }}',
+            output: {
+                manualChunks: (id) => {
+                    /*
+                    if(id.includes('file.name')) {
+                        return 'files';
+                    }
+                    */
+
+                    return 'main';
+                }
+            }
+        }
+    },
+
+    server: {
+        host: '{{ host }}',
+        port: {{ port }},
+        https: false,
+        strictPort: true,
+        origin: 'http://{{ host }}:{{ port }}',
+        hmr: {
+            protocol: 'ws',
+            host: '{{ host }}',
+        }
+    }
+});

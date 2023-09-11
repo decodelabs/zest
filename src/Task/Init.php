@@ -16,14 +16,14 @@ class Init implements Task
 {
     public function execute(): bool
     {
-        /** @var array<string> */
-        $plugins = Cli::prepareArguments();
+        Cli::getCommandDefinition()
+            ->addArgument('defaults=default', 'Defaults set name');
 
-        if (!Zest::run('generate-zest-config', '--check', ...$plugins)) {
-            return false;
-        }
+        /** @var array<string, string> $args */
+        $args = Cli::prepareArguments();
 
-        if (!Zest::run('generate-package-config', '--no-install', )) {
+
+        if (!Zest::run('generate-package-config', '--no-install')) {
             return false;
         }
 
@@ -31,7 +31,7 @@ class Init implements Task
             return false;
         }
 
-        if (!Zest::run('generate-vite-config')) {
+        if (!Zest::run('generate-vite-config', $args['defaults'])) {
             return false;
         }
 
