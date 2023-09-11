@@ -316,6 +316,8 @@ class Manifest
 
         $url = $config->shouldUseHttps() ? 'https' : 'http';
         $url .= '://' . $config->getHost() . ':' . $config->getPort();
+        $url .= '/' . trim((string)$config->getUrlPrefix(), '/');
+        $url = rtrim($url, '/') . '/';
 
         $output = new static($file, true);
         $entry = $config->getEntry() ?? 'src/main.js';
