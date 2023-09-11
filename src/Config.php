@@ -26,4 +26,5 @@ interface Config
     public function getUrlPrefix(): ?string;
 
     public function getEntry(): ?string;
+    public function getManifestName(): string;
 }

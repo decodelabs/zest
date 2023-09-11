@@ -15,6 +15,8 @@ use DecodeLabs\Zest\Manifest;
 
 class Build implements Task
 {
+    use ViteTrait;
+
     public function execute(): bool
     {
         Zest::checkPackage();
@@ -22,21 +24,24 @@ class Build implements Task
         Terminus::info('Building assets');
         Terminus::newLine();
 
-        if (!Zest::$package->runScript('build')) {
+        $configName = $this->getConfigFileName();
+
+        if (!Zest::$package->runNpx(
+            'vite',
+            'build',
+            $this->getConfigArgument($configName)
+        )) {
             return false;
         }
 
         Terminus::newLine();
-        $this->buildManifest();
+        $config = Zest::loadConfig($configName);
+
+        Manifest::generateProduction(
+            $this->getManifestFile($config),
+            $config
+        );
+
         return true;
-    }
-
-    protected function buildManifest(): void
-    {
-        $file = Zest::$package->rootDir->getDir(
-            Zest::$config->getOutDir() ?? 'dist'
-        )->getFile('manifest.json');
-
-        Manifest::generateProduction($file, Zest::$config);
     }
 }

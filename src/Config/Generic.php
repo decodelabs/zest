@@ -25,14 +25,26 @@ class Generic implements Config
     protected ?string $publicDir = null;
     protected ?string $urlPrefix = null;
     protected ?string $entry = null;
+    protected string $manifestName = 'manifest.json';
 
     protected File $file;
     protected Controller $controller;
 
-    public function __construct(Controller $controller)
-    {
+    public function __construct(
+        Controller $controller,
+        ?string $configName = null
+    ) {
         $this->controller = $controller;
-        $this->file = $controller->package->rootDir->getFile('vite.config.js');
+
+        $name = 'vite.';
+
+        if ($configName !== null) {
+            $name .= $configName . '.';
+        }
+
+        $name .= 'config.js';
+
+        $this->file = $controller->package->rootDir->getFile($name);
         $this->reload();
     }
 
@@ -55,6 +67,14 @@ class Generic implements Config
         $this->publicDir = Coercion::toString($this->extractValue($conf, 'publicDir'));
         $this->urlPrefix = Coercion::toString($this->extractValue($conf, 'base'));
         $this->entry = Coercion::toString($this->extractValue($conf, 'input'));
+
+        $manifest = $this->extractValue($conf, 'manifest');
+
+        if (is_string($manifest)) {
+            $this->manifestName = $manifest;
+        } else {
+            $this->manifestName = 'manifest.json';
+        }
     }
 
 
@@ -104,6 +124,7 @@ class Generic implements Config
                 $this->publicDir = 'assets';
                 $this->urlPrefix = '/theme/' . $this->file->getParent()?->getName() . '/';
                 $this->entry = 'src/main.js';
+                $this->manifestName = 'manifest.json';
                 break;
 
             default:
@@ -114,6 +135,7 @@ class Generic implements Config
                 $this->publicDir = 'public';
                 $this->urlPrefix = null;
                 $this->entry = 'src/main.js';
+                $this->manifestName = 'manifest.json';
                 break;
         }
     }
@@ -183,5 +205,13 @@ class Generic implements Config
     public function getEntry(): ?string
     {
         return $this->entry;
+    }
+
+    /**
+     * Get manifest name
+     */
+    public function getManifestName(): string
+    {
+        return $this->manifestName;
     }
 }

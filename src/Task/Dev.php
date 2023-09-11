@@ -10,30 +10,36 @@ declare(ticks=1);
 namespace DecodeLabs\Zest\Task;
 
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Terminus;
+use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Zest;
 use DecodeLabs\Zest\Manifest;
 
 class Dev implements Task
 {
+    use ViteTrait;
+
     public function execute(): bool
     {
         Zest::checkPackage();
 
-        $this->buildManifest();
+        $configName = $this->getConfigFileName();
+        $config = Zest::loadConfig($configName);
 
-        Zest::$package->runServerScript('dev');
-        Terminus::newLine();
+        Manifest::generateDev(
+            $this->getManifestFile($config),
+            $config
+        );
 
-        return Zest::run('build');
-    }
+        Zest::$package->runNpx(
+            'vite',
+            $this->getConfigArgument($configName)
+        );
 
-    protected function buildManifest(): void
-    {
-        $file = Zest::$package->rootDir->getDir(
-            Zest::$config->getOutDir() ?? 'dist'
-        )->getFile('manifest.json');
+        Cli::newLine();
 
-        Manifest::generateDev($file, Zest::$config);
+        return Zest::run(
+            'build',
+            $this->getConfigArgument($configName, true)
+        );
     }
 }

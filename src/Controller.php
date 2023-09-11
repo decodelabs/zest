@@ -22,18 +22,13 @@ use DecodeLabs\Zest\Config\Generic as GenericConfig;
 class Controller extends GenericController implements ControllerInterface
 {
     #[Plugin]
-    public Config $config;
-
-    #[Plugin]
     public OverpassContext $package;
 
     public function __construct(
-        ?Dir $dir = null,
-        ?Config $config = null
+        ?Dir $dir = null
     ) {
         // TODO: load implementation from container?
         $this->package = new OverpassContext($dir);
-        $this->config = $config ?? new GenericConfig($this);
     }
 
 
@@ -55,5 +50,10 @@ class Controller extends GenericController implements ControllerInterface
     public function getController(): Controller
     {
         return $this;
+    }
+
+    public function loadConfig(?string $name = null): Config
+    {
+        return new GenericConfig($this, $name);
     }
 }
