@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace DecodeLabs\Zest;
 
 use DecodeLabs\Atlas\File;
-use DecodeLabs\Coercion;
 use DecodeLabs\Genesis\FileTemplate;
 
 class Template extends FileTemplate
@@ -26,52 +25,7 @@ class Template extends FileTemplate
         parent::__construct($file ?? static::FILE);
     }
 
-    protected function generateSlot(string $name): ?string
-    {
-        switch ($name) {
-            case 'host':
-                return $this->controller->config->getHost() ?? 'localhost';
 
-            case 'port':
-                return Coercion::toStringOrNull($this->controller->config->getPort()) ??
-                    $this->getDefaultPort();
-
-            case 'base':
-                $output = '/' . trim((string)$this->controller->config->getUrlPrefix()) . '/';
-
-                if ($output === '//') {
-                    $output = '/';
-                }
-                return $output;
-
-            case 'origin':
-                $output = $this->controller->config->shouldUseHttps() ? 'https' : 'http';
-                $output .= '://' . $this->getSlot('host') . ':' . $this->getSlot('port');
-                return $output;
-
-            case 'outDir':
-                return $this->controller->config->getOutDir() ?? 'dist';
-
-            case 'assetsDir':
-                return $this->controller->config->getAssetsDir() ?? 'assets';
-
-            case 'publicDir':
-                return $this->controller->config->getPublicDir() ?? 'public';
-
-            case 'entry':
-                return $this->controller->config->getEntry() ?? 'src/main.js';
-        }
-
-        return parent::generateSlot($name);
-    }
-
-    /**
-     * Create default port prompt
-     */
-    protected function getDefaultPort(): string
-    {
-        return (string)rand(3000, 9999);
-    }
 
     /**
      * @param array<mixed> $data

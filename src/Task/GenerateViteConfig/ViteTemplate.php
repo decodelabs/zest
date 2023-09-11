@@ -9,9 +9,7 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Zest\Task\GenerateViteConfig;
 
-use DecodeLabs\Coercion;
-use DecodeLabs\Collections\Tree\NativeMutable as NativeTree;
-use DecodeLabs\Zest;
+use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Zest\Template;
 
 class ViteTemplate extends Template
@@ -21,165 +19,35 @@ class ViteTemplate extends Template
     protected function generateSlot(string $name): ?string
     {
         switch ($name) {
-            case 'config':
-                return $this->exportConfig();
+            case 'host':
+                return Cli::ask('What host should vite use?', $this->controller->config->getHost() ?? 'localhost');
 
-            case 'root':
-                return (string)Zest::$package->rootDir;
+            case 'port':
+                return Cli::ask('What port should vite run on?', (string)($this->controller->config->getPort() ?? rand(3000, 9999)));
 
-            case 'pluginImports':
-                return $this->getPluginImports();
+            case 'outDir':
+                return Cli::ask('Where should your builds go?', $this->controller->config->getOutDir() ?? 'dist');
 
-            case 'plugins':
-                return $this->getPluginConfig();
+            case 'assetsDir':
+                return Cli::ask('Where should your assets go within builds?', $this->controller->config->getAssetsDir() ?? 'assets');
+
+            case 'publicDir':
+                return Cli::ask('Where are your public assets located?', $this->controller->config->getPublicDir() ?? 'public');
+
+            case 'urlPrefix':
+                $out = Cli::ask('What url prefix should production paths use?', $this->controller->config->getUrlPrefix() ?? '/');
+                $out = trim((string)$out, '/') . '/';
+
+                if ($out !== '/') {
+                    $out = '/' . $out;
+                }
+
+                return $out;
+
+            case 'entry':
+                return Cli::ask('What is your main entry file?', $this->controller->config->getEntry() ?? 'src/main.js');
         }
 
         return parent::generateSlot($name);
-    }
-
-    /**
-     * Export config
-     */
-    protected function exportConfig(): string
-    {
-        $data = new NativeTree([
-            'plugins' => '{{ plugins }}',
-            'root' => $this->getSlot('root'),
-            'base' => $this->getSlot('base'),
-            'build' => [
-                'outDir' => $this->getSlot('outDir'),
-                'assetsDir' => $this->getSlot('assetsDir'),
-                'manifest' => true,
-                'rollupOptions' => $this->getRollupOptions()
-            ],
-            'server' => [
-                'host' => $this->getSlot('host'),
-                'port' => Coercion::toInt($this->getSlot('port')),
-                'https' => $this->controller->config->shouldUseHttps(),
-                'strictPort' => true,
-                'origin' => $this->getSlot('origin'),
-                'hmr' => [
-                    'protocol' => 'ws',
-                    'host' => $this->getSlot('host')
-                ]
-            ]
-        ]);
-
-        $data->merge($this->controller->config->getViteConfig());
-        $data = $data->toArray();
-        $output = $this->exportJson($data);
-
-        return str_replace(
-            "'{{ plugins }}'",
-            $this->getPluginConfig(),
-            $output
-        );
-    }
-
-    /**
-     * Get plugin imports list
-     */
-    protected function getPluginImports(): string
-    {
-        $output = [];
-        $index = [];
-
-        foreach ($this->controller->config->getPlugins() as $name) {
-            $plugin = Zest::getPlugin($name);
-            $imports = $plugin->getImports();
-
-            foreach ($imports as $package => $targets) {
-                if (!isset($index[$package])) {
-                    $index[$package] = [];
-                }
-
-                $index[$package] = array_unique(array_merge(
-                    $index[$package],
-                    $targets
-                ));
-            }
-        }
-
-        foreach ($index as $package => $targets) {
-            $str = 'import ';
-
-            if (count($targets) === 1) {
-                $str .= current($targets) . ' ';
-            } else {
-                $str .=
-                    '{' . "\n" .
-                    '    ' . implode(",\n", $targets) . "\n" .
-                    '} ';
-            }
-
-            $str .= 'from \'' . $package . '\'';
-            $output[] = $str;
-        }
-
-        return implode("\n", $output);
-    }
-
-    /**
-     * Get plugin config
-     */
-    protected function getPluginConfig(): string
-    {
-        $output = [];
-
-        foreach ($this->controller->config->getPluginConfig() as $name => $config) {
-            $plugin = Zest::getPlugin($name);
-            $imports = $plugin->getImports();
-
-            if (empty($imports)) {
-                continue;
-            }
-
-            $str = $plugin->getName() . '(';
-
-            if ($config !== null) {
-                $str .= str_replace(
-                    "\n",
-                    "\n        ",
-                    (string)json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-                );
-            }
-
-            $str .= ')';
-            $output[] = $str;
-        }
-
-        return '[' . "\n" .
-        '        ' . implode(",\n        ", $output) . "\n" .
-        '    ]';
-    }
-
-    /**
-     * Get rollup options
-     *
-     * @return array<string, mixed>
-     */
-    protected function getRollupOptions(): array
-    {
-        $data = [
-            'input' => $this->controller->config->getEntry() ?? 'src/main.js'
-        ];
-
-        if (!$this->controller->config->shouldHash()) {
-            $dir = $this->controller->config->getAssetsDir();
-
-            if ($dir === '.') {
-                $dir = null;
-            } elseif (!empty($dir)) {
-                $dir .= '/';
-            }
-
-            $data['output'] = [
-                'entryFileNames' => '`' . $dir . '[name].js`',
-                'chunkFileNames' => '`' . $dir . '[name].js`',
-                'assetFileNames' => '`' . $dir . '[name].[ext]`'
-            ];
-        }
-
-        return $data;
     }
 }
