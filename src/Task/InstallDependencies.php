@@ -14,7 +14,7 @@ use DecodeLabs\Overpass;
 class InstallDependencies implements Task
 {
     public const DEV_PACKAGES = [
-        'vite' => '^3.2'
+        'vite' => '^4'
     ];
 
     public function execute(): bool
