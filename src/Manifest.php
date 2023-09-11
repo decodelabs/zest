@@ -265,6 +265,14 @@ class Manifest
 
         $data = $output->loadData();
         $prefix = trim((string)$config->getUrlPrefix(), '/');
+
+        $publicDir = (string)$config->getPublicDir();
+        $outDir = (string)$config->getOutDir();
+
+        if (str_starts_with($outDir, $publicDir)) {
+            $prefix .= '/' . trim(substr($outDir, strlen($publicDir)), '/');
+        }
+
         $styles = [];
 
         foreach ($data as $file) {
