@@ -1,3 +1,5 @@
+* Added asset path check in manifest generation
+
 ## v0.2.3 (2023-09-11)
 * Added multi-config setup support
 * Added custom manifest name support

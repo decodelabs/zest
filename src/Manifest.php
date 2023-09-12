@@ -271,6 +271,8 @@ class Manifest
 
         if (str_starts_with($outDir, $publicDir)) {
             $prefix .= '/' . trim(substr($outDir, strlen($publicDir)), '/');
+        } elseif (str_starts_with($outDir, 'assets')) {
+            $prefix .= '/' . trim(substr($outDir, 6), '/');
         }
 
         $styles = [];
