@@ -1,3 +1,4 @@
+## v0.2.5 (2023-09-12)
 * Implemented Clip Task hooks
 
 ## v0.2.4 (2023-09-12)
