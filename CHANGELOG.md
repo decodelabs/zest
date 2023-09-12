@@ -1,3 +1,4 @@
+## v0.2.4 (2023-09-12)
 * Added asset path check in manifest generation
 
 ## v0.2.3 (2023-09-11)
