@@ -12,7 +12,7 @@
         "php": "^8.0",
 
         "decodelabs/archetype": "^0.2.10",
-        "decodelabs/clip": "^0.3.2",
+        "decodelabs/clip": "^0.3.4",
         "decodelabs/collections": "^0.8.1",
         "decodelabs/exceptional": "^0.4.3",
         "decodelabs/genesis": "^0.7.1",
