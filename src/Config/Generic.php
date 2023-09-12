@@ -59,16 +59,16 @@ class Generic implements Config
 
         $conf = $this->file->getContents();
 
-        $this->host = Coercion::toString($this->extractValue($conf, 'host'));
+        $this->host = Coercion::toString($this->extractValue($conf, 'host', true) ?? 'localhost');
         $this->port = Coercion::toInt($this->extractValue($conf, 'port'));
-        $this->https = Coercion::toBool($this->extractValue($conf, 'https'));
+        $this->https = Coercion::toBool($this->extractValue($conf, 'https', true));
         $this->outDir = Coercion::toString($this->extractValue($conf, 'outDir'));
         $this->assetsDir = Coercion::toString($this->extractValue($conf, 'assetsDir'));
         $this->publicDir = Coercion::toString($this->extractValue($conf, 'publicDir'));
-        $this->urlPrefix = Coercion::toString($this->extractValue($conf, 'base'));
-        $this->entry = Coercion::toString($this->extractValue($conf, 'input'));
+        $this->urlPrefix = Coercion::toStringOrNull($this->extractValue($conf, 'base', true));
+        $this->entry = Coercion::toStringOrNull($this->extractValue($conf, 'input', true));
 
-        $manifest = $this->extractValue($conf, 'manifest');
+        $manifest = $this->extractValue($conf, 'manifest', true);
 
         if (is_string($manifest)) {
             $this->manifestName = $manifest;
@@ -80,7 +80,8 @@ class Generic implements Config
 
     protected function extractValue(
         string $conf,
-        string $key
+        string $key,
+        bool $nullable = false
     ): string|int|bool|null {
         $key = preg_quote($key, '/');
         $matches = [];
@@ -104,6 +105,10 @@ class Generic implements Config
             }
 
             return $value;
+        }
+
+        if ($nullable) {
+            return null;
         }
 
         throw Exceptional::UnexpectedValue(

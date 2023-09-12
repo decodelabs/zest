@@ -1,3 +1,6 @@
+## v0.2.6 (2023-09-12)
+* Improved Vite config parsing
+
 ## v0.2.5 (2023-09-12)
 * Implemented Clip Task hooks
 
