@@ -10,6 +10,7 @@ namespace DecodeLabs\Zest\Task;
 
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Task;
+use DecodeLabs\Clip\Task\BeforeHook;
 use DecodeLabs\Clip\Task\GenerateFileTrait;
 use DecodeLabs\Coercion;
 use DecodeLabs\Overpass;
@@ -19,13 +20,13 @@ use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Task\GenerateViteConfig\ViteTemplate;
 use DecodeLabs\Zest\Template;
 
-class GenerateViteConfig implements Task
+class GenerateViteConfig implements Task, BeforeHook
 {
     use GenerateFileTrait;
 
     protected Config $config;
 
-    protected function getTargetFile(): File
+    public function beforeExecute(): bool
     {
         Cli::getCommandDefinition()
             ->addArgument('defaults=default', 'Defaults set name');
@@ -37,6 +38,11 @@ class GenerateViteConfig implements Task
             Coercion::toString(Cli::getArgument('defaults'))
         );
 
+        return true;
+    }
+
+    protected function getTargetFile(): File
+    {
         return Overpass::$rootDir->getFile('vite.config.js');
     }
 
