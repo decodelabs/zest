@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Zest\Task;
 
 use DecodeLabs\Clip\Task;
+use DecodeLabs\Coercion;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Zest;
 
@@ -16,12 +17,8 @@ class Init implements Task
 {
     public function execute(): bool
     {
-        Cli::getCommandDefinition()
+        Cli::$command
             ->addArgument('defaults=default', 'Defaults set name');
-
-        /** @var array<string, string> $args */
-        $args = Cli::prepareArguments();
-
 
         if (!Zest::run('generate-package-config', '--no-install')) {
             return false;
@@ -31,7 +28,7 @@ class Init implements Task
             return false;
         }
 
-        if (!Zest::run('generate-vite-config', $args['defaults'])) {
+        if (!Zest::run('generate-vite-config', Coercion::toString(Cli::$command['defaults']))) {
             return false;
         }
 

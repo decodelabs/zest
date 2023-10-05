@@ -18,11 +18,10 @@ trait ViteTrait
 {
     protected function getConfigFileName(): ?string
     {
-        Cli::getCommandDefinition()
+        Cli::$command
             ->addArgument('-config=vite', 'Config name');
 
-        Cli::prepareArguments();
-        $output = Coercion::toString(Cli::getArgument('config'));
+        $output = Coercion::toString(Cli::$command['config']);
 
         if (
             $output === 'vite' ||

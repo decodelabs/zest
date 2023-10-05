@@ -34,12 +34,11 @@ class GeneratePackageConfig implements Task
 
     protected function afterFileSave(File $file): bool
     {
-        Cli::getCommandDefinition()
+        Cli::$command
             ->addArgument('-no-install', 'Don\'t install dependencies');
-        Cli::prepareArguments();
 
 
-        if (!Cli::getArgument('no-install')) {
+        if (!Cli::$command['no-install']) {
             return Zest::run('install-dependencies');
         }
 
