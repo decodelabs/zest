@@ -17,7 +17,8 @@
         "decodelabs/exceptional": "^0.4.3",
         "decodelabs/genesis": "^0.7.1",
         "decodelabs/overpass": "^0.2",
-        "decodelabs/terminus": "^0.9.3"
+        "decodelabs/terminus": "^0.10",
+        "decodelabs/veneer": "^0.10.19"
     },
     "require-dev": {
         "ext-pcntl": "*",
@@ -37,5 +38,7 @@
         "branch-alias": {
             "dev-develop": "0.2.x-dev"
         }
+    },
+    "repositories": {
     }
 }
