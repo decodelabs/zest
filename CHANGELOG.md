@@ -1,3 +1,5 @@
+* Updated Genesis dependency
+
 ## v0.2.7 (2023-10-05)
 * Updated Terminus dependency
 
