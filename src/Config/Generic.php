@@ -118,8 +118,9 @@ class Generic implements Config
 
 
 
-    public function loadDefaults(?string $name = null): void
-    {
+    public function loadDefaults(
+        ?string $name = null
+    ): void {
         switch ($name) {
             case 'df-r7':
                 $this->host = 'localhost';

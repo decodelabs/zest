@@ -16,8 +16,9 @@ class PackageTemplate extends Template
 {
     public const FILE = __DIR__ . '/package.template';
 
-    protected function generateSlot(string $name): ?string
-    {
+    protected function generateSlot(
+        string $name
+    ): ?string {
         switch ($name) {
             case 'pkgName':
                 return Cli::ask('What is your full package name?', function () {

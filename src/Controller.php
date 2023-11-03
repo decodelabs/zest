@@ -52,8 +52,9 @@ class Controller extends GenericController implements ControllerInterface
         return $this;
     }
 
-    public function loadConfig(?string $name = null): Config
-    {
+    public function loadConfig(
+        ?string $name = null
+    ): Config {
         return new GenericConfig($this, $name);
     }
 }

@@ -28,8 +28,9 @@ class ViteTemplate extends Template
         $this->config = $config;
     }
 
-    protected function generateSlot(string $name): ?string
-    {
+    protected function generateSlot(
+        string $name
+    ): ?string {
         switch ($name) {
             case 'host':
                 return Cli::ask('What host should vite use?', $this->config->getHost() ?? 'localhost');

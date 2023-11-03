@@ -77,8 +77,9 @@ class Template extends FileTemplate
     /**
      * @param array<mixed> $arr
      */
-    protected function isAssoc(array $arr): bool
-    {
+    protected function isAssoc(
+        array $arr
+    ): bool {
         if ($arr === []) {
             return false;
         }

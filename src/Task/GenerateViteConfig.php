@@ -53,8 +53,9 @@ class GenerateViteConfig implements Task, BeforeHook
         );
     }
 
-    protected function afterFileSave(File $file): bool
-    {
+    protected function afterFileSave(
+        File $file
+    ): bool {
         $this->config->reload();
 
         // Ensure index.html exists

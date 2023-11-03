@@ -32,8 +32,9 @@ class GeneratePackageConfig implements Task
         );
     }
 
-    protected function afterFileSave(File $file): bool
-    {
+    protected function afterFileSave(
+        File $file
+    ): bool {
         Cli::$command
             ->addArgument('-no-install', 'Don\'t install dependencies');
 

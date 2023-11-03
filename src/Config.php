@@ -12,7 +12,10 @@ namespace DecodeLabs\Zest;
 interface Config
 {
     public function reload(): void;
-    public function loadDefaults(?string $name = null): void;
+
+    public function loadDefaults(
+        ?string $name = null
+    ): void;
 
 
     public function getHost(): ?string;
