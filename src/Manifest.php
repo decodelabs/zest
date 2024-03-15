@@ -282,7 +282,10 @@ class Manifest
 
         foreach ($data as $file) {
             // JS
-            if ($file['isEntry']) {
+            if (
+                $file['isEntry'] &&
+                str_ends_with((string)$file['file'], '.js')
+            ) {
                 $output->bodyJs[$prefix . '/' . $file['file']] = static::getJsFileAttrs((string)$file['file']);
             }
 
@@ -291,7 +294,10 @@ class Manifest
                 foreach ($file->css as $cssFile) {
                     $output->css[$prefix . '/' . $cssFile->getValue()] = [];
                 }
-            } elseif (str_ends_with((string)$file['src'], '.css')) {
+            } elseif (
+                str_ends_with((string)$file['src'], '.css') ||
+                str_ends_with((string)$file['file'], '.css')
+            ) {
                 $styles[$prefix . '/' . $file['file']] = [];
             }
         }

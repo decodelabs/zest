@@ -1,3 +1,4 @@
+* Fixed CSS as entry point
 * Made PHP8.1 minimum version
 
 ## v0.2.8 (2023-10-18)
