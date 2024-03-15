@@ -1,3 +1,4 @@
+## v0.2.9 (2024-03-15)
 * Fixed CSS as entry point
 * Made PHP8.1 minimum version
 
