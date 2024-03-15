@@ -77,8 +77,9 @@ class Manifest
      * @param array<string, array<string, mixed>> $files
      * @return $this
      */
-    public function addHeadJs(array $files): static
-    {
+    public function addHeadJs(
+        array $files
+    ): static {
         foreach ($files as $file => $attrs) {
             $this->headJs[$file] = $attrs;
         }
@@ -102,8 +103,9 @@ class Manifest
      * @param array<string, array<string, mixed>> $files
      * @return $this
      */
-    public function addBodyJs(array $files): static
-    {
+    public function addBodyJs(
+        array $files
+    ): static {
         foreach ($files as $file => $attrs) {
             $this->bodyJs[$file] = $attrs;
         }
@@ -127,8 +129,9 @@ class Manifest
      * @param array<string, array<string, mixed>> $files
      * @return $this
      */
-    public function addCss(array $files): static
-    {
+    public function addCss(
+        array $files
+    ): static {
         foreach ($files as $file => $attrs) {
             $this->css[$file] = $attrs;
         }
@@ -279,7 +282,10 @@ class Manifest
 
         foreach ($data as $file) {
             // JS
-            if ($file['isEntry']) {
+            if (
+                $file['isEntry'] &&
+                str_ends_with((string)$file['file'], '.js')
+            ) {
                 $output->bodyJs[$prefix . '/' . $file['file']] = static::getJsFileAttrs((string)$file['file']);
             }
 
@@ -288,7 +294,10 @@ class Manifest
                 foreach ($file->css as $cssFile) {
                     $output->css[$prefix . '/' . $cssFile->getValue()] = [];
                 }
-            } elseif (str_ends_with((string)$file['src'], '.css')) {
+            } elseif (
+                str_ends_with((string)$file['src'], '.css') ||
+                str_ends_with((string)$file['file'], '.css')
+            ) {
                 $styles[$prefix . '/' . $file['file']] = [];
             }
         }
@@ -339,8 +348,9 @@ class Manifest
     /**
      * @return array<string, mixed>
      */
-    protected static function getJsFileAttrs(string $file): array
-    {
+    protected static function getJsFileAttrs(
+        string $file
+    ): array {
         $output = [];
 
         if (false !== strpos($file, '-legacy')) {
