@@ -1,3 +1,4 @@
+## v0.2.10 (2024-04-11)
 * Added support for vite.config.json exports in Config
 
 ## v0.2.9 (2024-03-15)
