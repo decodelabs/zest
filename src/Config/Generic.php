@@ -28,6 +28,7 @@ class Generic implements Config
     protected string $manifestName = 'manifest.json';
 
     protected File $file;
+    protected File $jsonFile;
     protected Controller $controller;
 
     public function __construct(
@@ -45,6 +46,7 @@ class Generic implements Config
         $name .= 'config.js';
 
         $this->file = $controller->package->rootDir->getFile($name);
+        $this->jsonFile = $controller->package->rootDir->getFile($name . 'on');
         $this->reload();
     }
 
@@ -58,17 +60,18 @@ class Generic implements Config
         }
 
         $conf = $this->file->getContents();
+        $jsonConf = $this->jsonFile->exists() ? $this->jsonFile->getContents() : null;
 
-        $this->host = Coercion::toString($this->extractValue($conf, 'host', true) ?? 'localhost');
-        $this->port = Coercion::toInt($this->extractValue($conf, 'port'));
-        $this->https = Coercion::toBool($this->extractValue($conf, 'https', true));
-        $this->outDir = Coercion::toString($this->extractValue($conf, 'outDir'));
-        $this->assetsDir = Coercion::toString($this->extractValue($conf, 'assetsDir'));
-        $this->publicDir = Coercion::toString($this->extractValue($conf, 'publicDir'));
-        $this->urlPrefix = Coercion::toStringOrNull($this->extractValue($conf, 'base', true));
-        $this->entry = Coercion::toStringOrNull($this->extractValue($conf, 'input', true));
+        $this->host = Coercion::toString($this->extractValue($conf, $jsonConf, 'host', true) ?? 'localhost');
+        $this->port = Coercion::toInt($this->extractValue($conf, $jsonConf, 'port'));
+        $this->https = Coercion::toBool($this->extractValue($conf, $jsonConf, 'https', true));
+        $this->outDir = Coercion::toString($this->extractValue($conf, $jsonConf, 'outDir'));
+        $this->assetsDir = Coercion::toString($this->extractValue($conf, $jsonConf, 'assetsDir'));
+        $this->publicDir = Coercion::toString($this->extractValue($conf, $jsonConf, 'publicDir'));
+        $this->urlPrefix = Coercion::toStringOrNull($this->extractValue($conf, $jsonConf, 'base', true));
+        $this->entry = Coercion::toStringOrNull($this->extractValue($conf, $jsonConf, 'input', true));
 
-        $manifest = $this->extractValue($conf, 'manifest', true);
+        $manifest = $this->extractValue($conf, $jsonConf, 'manifest', true);
 
         if (is_string($manifest)) {
             $this->manifestName = $manifest;
@@ -80,6 +83,7 @@ class Generic implements Config
 
     protected function extractValue(
         string $conf,
+        ?string $jsonConf,
         string $key,
         bool $nullable = false
     ): string|int|bool|null {
@@ -87,24 +91,14 @@ class Generic implements Config
         $matches = [];
 
         if (preg_match('/' . $key . ':\s*(?<value>.+?),/', $conf, $matches)) {
-            $value = trim($matches['value']);
+            return $this->normalizeConfigValue($matches['value']);
+        }
 
-            if (
-                substr($value, 0, 1) === "'" ||
-                substr($value, 0, 1) === '"'
-            ) {
-                $value = substr($value, 1, -1);
-            }
-
-            if ($value === 'true') {
-                return true;
-            } elseif ($value === 'false') {
-                return false;
-            } elseif ($value === 'null') {
-                return null;
-            }
-
-            return $value;
+        if (
+            $jsonConf &&
+            preg_match('/"' . $key . '":\s*(?<value>.+?),/', $jsonConf, $matches)
+        ) {
+            return $this->normalizeConfigValue($matches['value']);
         }
 
         if ($nullable) {
@@ -114,6 +108,29 @@ class Generic implements Config
         throw Exceptional::UnexpectedValue(
             'Unable to extract ' . $key . ' from vite.config.js'
         );
+    }
+
+    protected function normalizeConfigValue(
+        string $value
+    ): string|int|bool|null {
+        $value = trim($value);
+
+        if (
+            substr($value, 0, 1) === "'" ||
+            substr($value, 0, 1) === '"'
+        ) {
+            $value = substr($value, 1, -1);
+        }
+
+        if ($value === 'true') {
+            return true;
+        } elseif ($value === 'false') {
+            return false;
+        } elseif ($value === 'null') {
+            return null;
+        }
+
+        return $value;
     }
 
 
