@@ -9,9 +9,12 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Zest\Config;
 
+use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Coercion;
+use DecodeLabs\Collections\Tree\NativeMutable as Tree;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Overpass;
 use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Controller;
 
@@ -28,7 +31,6 @@ class Generic implements Config
     protected string $manifestName = 'manifest.json';
 
     protected File $file;
-    protected File $jsonFile;
     protected Controller $controller;
 
     public function __construct(
@@ -46,7 +48,6 @@ class Generic implements Config
         $name .= 'config.js';
 
         $this->file = $controller->package->rootDir->getFile($name);
-        $this->jsonFile = $controller->package->rootDir->getFile($name . 'on');
         $this->reload();
     }
 
@@ -59,19 +60,46 @@ class Generic implements Config
             return;
         }
 
-        $conf = $this->file->getContents();
-        $jsonConf = $this->jsonFile->exists() ? $this->jsonFile->getContents() : null;
+        $nodeModules = $this->file->getParent()?->getDir('node_modules');
 
-        $this->host = Coercion::toString($this->extractValue($conf, $jsonConf, 'host', true) ?? 'localhost');
-        $this->port = Coercion::toInt($this->extractValue($conf, $jsonConf, 'port'));
-        $this->https = Coercion::toBool($this->extractValue($conf, $jsonConf, 'https', true));
-        $this->outDir = Coercion::toString($this->extractValue($conf, $jsonConf, 'outDir'));
-        $this->assetsDir = Coercion::toString($this->extractValue($conf, $jsonConf, 'assetsDir'));
-        $this->publicDir = Coercion::toString($this->extractValue($conf, $jsonConf, 'publicDir'));
-        $this->urlPrefix = Coercion::toStringOrNull($this->extractValue($conf, $jsonConf, 'base', true));
-        $this->entry = Coercion::toStringOrNull($this->extractValue($conf, $jsonConf, 'input', true));
+        if (!$nodeModules?->exists()) {
+            throw Exceptional::Runtime(
+                'Node modules not found. Please run `npm install`'
+            );
+        }
 
-        $manifest = $this->extractValue($conf, $jsonConf, 'manifest', true);
+        $loaderFile = $nodeModules->getFile('.decodelabs-zest/load-vite-config.cjs');
+        $srcLoaderFile = Atlas::file(__DIR__ . '/load-vite-config.cjs');
+
+        if ($loaderFile->exists()) {
+            $hash = $loaderFile->getHash('crc32');
+
+            if ($hash !== $srcLoaderFile->getHash('crc32')) {
+                $loaderFile->delete();
+            }
+        }
+
+        if (!$loaderFile->exists()) {
+            $loaderFile->putContents(
+                file_get_contents(__DIR__ . '/load-vite-config.cjs')
+            );
+        }
+
+        $json = Overpass::bridge($loaderFile, (string)$this->file);
+        $tree = new Tree(Coercion::toArray(
+            Coercion::toArray($json)['config'] ?? []
+        ));
+
+        $this->host = $tree->server->host->as('?string') ?? 'localhost';
+        $this->port = $tree->server->port->as('int');
+        $this->https = $tree->server->https->as('?bool') ?? false;
+        $this->outDir = $tree->build->outDir->as('?string') ?? 'dist';
+        $this->assetsDir = $tree->build->assetsDir->as('?string') ?? 'assets';
+        $this->publicDir = $tree->publicDir->as('?string') ?? 'public';
+        $this->urlPrefix = $tree->base->as('?string') ?? '/';
+        $this->entry = $tree->build->rollupOptions->input->as('?string') ?? 'src/main.js';
+
+        $manifest = $tree->build['manifest'] ?? true;
 
         if (is_string($manifest)) {
             $this->manifestName = $manifest;
@@ -79,60 +107,6 @@ class Generic implements Config
             $this->manifestName = 'manifest.json';
         }
     }
-
-
-    protected function extractValue(
-        string $conf,
-        ?string $jsonConf,
-        string $key,
-        bool $nullable = false
-    ): string|int|bool|null {
-        $key = preg_quote($key, '/');
-        $matches = [];
-
-        if (preg_match('/' . $key . ':\s*(?<value>.+?),/', $conf, $matches)) {
-            return $this->normalizeConfigValue($matches['value']);
-        }
-
-        if (
-            $jsonConf &&
-            preg_match('/"' . $key . '":\s*(?<value>.+?),/', $jsonConf, $matches)
-        ) {
-            return $this->normalizeConfigValue($matches['value']);
-        }
-
-        if ($nullable) {
-            return null;
-        }
-
-        throw Exceptional::UnexpectedValue(
-            'Unable to extract ' . $key . ' from vite.config.js'
-        );
-    }
-
-    protected function normalizeConfigValue(
-        string $value
-    ): string|int|bool|null {
-        $value = trim($value);
-
-        if (
-            substr($value, 0, 1) === "'" ||
-            substr($value, 0, 1) === '"'
-        ) {
-            $value = substr($value, 1, -1);
-        }
-
-        if ($value === 'true') {
-            return true;
-        } elseif ($value === 'false') {
-            return false;
-        } elseif ($value === 'null') {
-            return null;
-        }
-
-        return $value;
-    }
-
 
 
     public function loadDefaults(
