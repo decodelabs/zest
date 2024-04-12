@@ -1,3 +1,4 @@
+## v0.2.11 (2024-04-12)
 * Read vite.config.js directly via Overpass
 
 ## v0.2.10 (2024-04-11)
