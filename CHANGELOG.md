@@ -1,3 +1,4 @@
+## v0.2.12 (2024-04-16)
 * Added support for Vite 5 manifest paths
 
 ## v0.2.11 (2024-04-12)
