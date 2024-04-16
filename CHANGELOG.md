@@ -1,3 +1,5 @@
+* Added support for Vite 5 manifest paths
+
 ## v0.2.11 (2024-04-12)
 * Read vite.config.js directly via Overpass
 
