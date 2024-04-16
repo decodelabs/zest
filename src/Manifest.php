@@ -47,6 +47,8 @@ class Manifest
             $file = Atlas::file($file);
         }
 
+
+
         $genFile = Atlas::file((string)$file . '.php');
 
         if (!$genFile->exists()) {
@@ -55,6 +57,7 @@ class Manifest
 
         return require $genFile;
     }
+
 
     final public function __construct(
         string|File $file,

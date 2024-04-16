@@ -51,8 +51,16 @@ trait ViteTrait
     protected function getManifestFile(
         Config $config
     ): File {
-        return Zest::$package->rootDir->getDir(
+        $dir = Zest::$package->rootDir->getDir(
             $config->getOutDir() ?? 'dist'
-        )->getFile($config->getManifestName());
+        );
+
+        $file = $dir->getFile($config->getManifestName());
+
+        if (!$file->exists()) {
+            $file = $dir->getFile('.vite/' . $config->getManifestName());
+        }
+
+        return $file;
     }
 }
