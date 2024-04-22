@@ -39,7 +39,7 @@ class Dev implements Task
 
         return Zest::run(
             'build',
-            $this->getConfigArgument($configName, true)
+            ...$this->getBuildArguments($configName, true)
         );
     }
 }

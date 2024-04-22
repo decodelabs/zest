@@ -29,7 +29,7 @@ class Build implements Task
         if (!Zest::$package->runNpx(
             'vite',
             'build',
-            $this->getConfigArgument($configName)
+            ...$this->getBuildArguments($configName)
         )) {
             return false;
         }

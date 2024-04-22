@@ -1,3 +1,6 @@
+* Added check for ../assets outDir
+* Added --emptyOutDir option to vite build command
+
 ## v0.2.12 (2024-04-16)
 * Added support for Vite 5 manifest paths
 
