@@ -47,8 +47,6 @@ class Manifest
             $file = Atlas::file($file);
         }
 
-
-
         $genFile = Atlas::file((string)$file . '.php');
 
         if (!$genFile->exists()) {
@@ -279,6 +277,8 @@ class Manifest
             $prefix .= '/' . trim(substr($outDir, strlen($publicDir)), '/');
         } elseif (str_starts_with($outDir, 'assets')) {
             $prefix .= '/' . trim(substr($outDir, 6), '/');
+        } elseif (str_starts_with($outDir, '../assets')) {
+            $prefix .= '/' . trim(substr($outDir, 9), '/');
         }
 
         $styles = [];

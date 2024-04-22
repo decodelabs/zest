@@ -48,6 +48,26 @@ trait ViteTrait
         return '--config=vite.' . $name . '.config.js';
     }
 
+    /**
+     * @return array<string>
+     */
+    protected function getBuildArguments(
+        ?string $configName,
+        bool $passthrough = false
+    ): array {
+        $args = [];
+
+        if ($configName !== null) {
+            $args[] = $this->getConfigArgument($configName, $passthrough);
+        }
+
+        if (Cli::$command['emptyOutDir']) {
+            $args[] = '--emptyOutDir';
+        }
+
+        return $args;
+    }
+
     protected function getManifestFile(
         Config $config
     ): File {
