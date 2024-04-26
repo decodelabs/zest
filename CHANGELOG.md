@@ -1,3 +1,7 @@
+## v0.2.14 (2024-04-26)
+* Updated Archetype dependency
+* Updated dependency list
+
 ## v0.2.13 (2024-04-22)
 * Added check for ../assets outDir
 * Added --emptyOutDir option to vite build command
