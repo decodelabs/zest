@@ -23,7 +23,6 @@
     "require-dev": {
         "ext-pcntl": "*",
 
-        "decodelabs/glitch": "^0.18.5",
         "decodelabs/phpstan-decodelabs": "^0.6.1"
     },
     "autoload": {
