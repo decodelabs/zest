@@ -1,3 +1,6 @@
+## v0.2.15 (2024-04-29)
+* Fixed Veneer stubs in gitattributes
+
 ## v0.2.14 (2024-04-26)
 * Updated Archetype dependency
 * Updated dependency list
