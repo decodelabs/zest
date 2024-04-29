@@ -1,3 +1,5 @@
+* Added Lucid dependency
+
 ## v0.2.15 (2024-04-29)
 * Fixed Veneer stubs in gitattributes
 
