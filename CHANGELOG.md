@@ -1,3 +1,6 @@
+## v0.2.17 (2024-07-17)
+* Updated Veneer dependency
+
 ## v0.2.16 (2024-04-29)
 * Added Lucid dependency
 
