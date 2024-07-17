@@ -15,7 +15,7 @@
         "decodelabs/clip": "^0.3.4",
         "decodelabs/collections": "^0.8.1",
         "decodelabs/exceptional": "^0.4.3",
-        "decodelabs/genesis": "^0.7.1|^0.8",
+        "decodelabs/genesis": "^0.8",
         "decodelabs/lucid": "^0.4.5",
         "decodelabs/overpass": "^0.2.6",
         "decodelabs/terminus": "^0.10",
