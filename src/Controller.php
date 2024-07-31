@@ -14,11 +14,9 @@ use DecodeLabs\Clip\Controller as ControllerInterface;
 use DecodeLabs\Clip\Controller\Generic as GenericController;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Overpass\Context as OverpassContext;
-use DecodeLabs\Veneer\LazyLoad;
 use DecodeLabs\Veneer\Plugin;
 use DecodeLabs\Zest\Config\Generic as GenericConfig;
 
-#[LazyLoad]
 class Controller extends GenericController implements ControllerInterface
 {
     #[Plugin]
