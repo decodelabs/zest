@@ -14,7 +14,7 @@ use DecodeLabs\Zest\Template;
 
 class PackageTemplate extends Template
 {
-    public const FILE = __DIR__ . '/package.template';
+    protected const File = __DIR__ . '/package.template';
 
     protected function generateSlot(
         string $name

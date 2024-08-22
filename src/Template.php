@@ -13,7 +13,7 @@ use DecodeLabs\Genesis\FileTemplate;
 
 class Template extends FileTemplate
 {
-    public const FILE = 'file.template';
+    protected const File = 'file.template';
 
     protected Controller $controller;
 
@@ -22,7 +22,7 @@ class Template extends FileTemplate
         string|File|null $file = null
     ) {
         $this->controller = $controller;
-        parent::__construct($file ?? static::FILE);
+        parent::__construct($file ?? static::File);
     }
 
 

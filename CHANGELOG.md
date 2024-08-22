@@ -1,3 +1,9 @@
+## v0.2.18 (2024-08-21)
+* Converted consts to protected PascalCase
+* Updated Veneer dependency and Stub
+* Removed unneeded LazyLoad binding attribute
+* Updated dependency versions
+
 ## v0.2.17 (2024-07-17)
 * Updated Veneer dependency
 
