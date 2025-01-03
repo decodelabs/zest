@@ -1,3 +1,6 @@
+* Added npm update task
+* Updated Vite version in initiator
+
 ## v0.2.18 (2024-08-21)
 * Converted consts to protected PascalCase
 * Updated Veneer dependency and Stub
