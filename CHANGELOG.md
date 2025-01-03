@@ -1,3 +1,4 @@
+## v0.2.19 (2025-01-04)
 * Added npm update task
 * Updated Vite version in initiator
 
