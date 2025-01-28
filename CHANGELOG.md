@@ -1,3 +1,6 @@
+## v0.2.20 (2025-01-28)
+* Made vite 6 default version
+
 ## v0.2.19 (2025-01-04)
 * Added npm update task
 * Updated Vite version in initiator
