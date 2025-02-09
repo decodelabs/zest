@@ -1,3 +1,5 @@
+* Added PHP8.4 to CI workflow
+
 ## v0.2.20 (2025-01-28)
 * Made vite 6 default version
 
