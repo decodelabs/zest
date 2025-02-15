@@ -1,3 +1,4 @@
+## v0.2.21 (2025-02-15)
 * Upgraded PHPStan to v2
 * Updated dependencies
 * Tidied boolean logic
