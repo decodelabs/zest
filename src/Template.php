@@ -13,7 +13,7 @@ use DecodeLabs\Genesis\FileTemplate;
 
 class Template extends FileTemplate
 {
-    protected const File = 'file.template';
+    protected const string File = 'file.template';
 
     protected Controller $controller;
 
@@ -37,7 +37,7 @@ class Template extends FileTemplate
         $output = '[';
         $indent++;
 
-        if ($isAssoc = $this->isAssoc($data)) {
+        if ($isAssoc = !array_is_list($data)) {
             $output .= "\n";
         }
 
@@ -72,19 +72,6 @@ class Template extends FileTemplate
 
         $output .= ']';
         return $output;
-    }
-
-    /**
-     * @param array<mixed> $arr
-     */
-    protected function isAssoc(
-        array $arr
-    ): bool {
-        if ($arr === []) {
-            return false;
-        }
-
-        return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
 

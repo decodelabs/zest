@@ -37,7 +37,9 @@ class Controller extends GenericController implements ControllerInterface
     public function checkPackage(): void
     {
         if (!$this->package->isInPackage()) {
-            throw Exceptional::Runtime('Not running within a node.js package');
+            throw Exceptional::Runtime(
+                message: 'Not running within a node.js package'
+            );
         }
     }
 

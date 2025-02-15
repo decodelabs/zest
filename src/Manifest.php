@@ -11,7 +11,6 @@ namespace DecodeLabs\Zest;
 use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Collections\Tree;
-use DecodeLabs\Collections\Tree\NativeMutable as NativeTree;
 
 class Manifest
 {
@@ -20,17 +19,17 @@ class Manifest
 
 
     /**
-     * @var array<string, array<string, mixed>>
+     * @var array<string,array<string,mixed>>
      */
     protected array $headJs = [];
 
     /**
-     * @var array<string, array<string, mixed>>
+     * @var array<string,array<string,mixed>>
      */
     protected array $bodyJs = [];
 
     /**
-     * @var array<string, array<string, mixed>>
+     * @var array<string,array<string,mixed>>
      */
     protected array $css = [];
 
@@ -53,7 +52,9 @@ class Manifest
             return new static($file);
         }
 
-        return require $genFile;
+        /** @var static $output */
+        $output = require $genFile;
+        return $output;
     }
 
 
@@ -162,7 +163,7 @@ class Manifest
     /**
      * Load json data
      *
-     * @return Tree<mixed>
+     * @return Tree<string|bool|float|int|null,string>
      */
     public function loadData(): Tree
     {
@@ -173,7 +174,9 @@ class Manifest
             $data = json_decode($this->file->getContents(), true);
         }
 
-        return new NativeTree($data);
+        /** @var Tree<string|bool|float|int|null,string> $output */
+        $output = new Tree($data);
+        return $output;
     }
 
     /**

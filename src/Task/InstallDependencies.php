@@ -13,7 +13,10 @@ use DecodeLabs\Overpass;
 
 class InstallDependencies implements Task
 {
-    protected const DevPackages = [
+    /**
+     * @var array<string,string>
+     */
+    protected const array DevPackages = [
         'vite' => '^6'
     ];
 
@@ -25,7 +28,7 @@ class InstallDependencies implements Task
             $devPackages[$name] = Overpass::preparePackageInstallName($name, $version);
         }
 
-        Overpass::install(...array_values($packages));
+        //Overpass::install(...array_values($packages));
         Overpass::installDev(...array_values($devPackages));
 
         return true;
