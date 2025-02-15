@@ -42,7 +42,9 @@ class Hub extends ClipHub
         });
         */
 
-        /** @phpstan-ignore-next-line */
-        Veneer::register(Controller::class, Zest::class);
+        Veneer\Manager::getGlobalManager()->register(
+            Controller::class,
+            Zest::class
+        );
     }
 }

@@ -12,7 +12,7 @@ namespace DecodeLabs\Zest\Config;
 use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Coercion;
-use DecodeLabs\Collections\Tree\NativeMutable as Tree;
+use DecodeLabs\Collections\Tree;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Overpass;
 use DecodeLabs\Zest\Config;
@@ -64,7 +64,7 @@ class Generic implements Config
 
         if (!$nodeModules?->exists()) {
             throw Exceptional::Runtime(
-                'Node modules not found. Please run `npm install`'
+                message: 'Node modules not found. Please run `npm install`'
             );
         }
 

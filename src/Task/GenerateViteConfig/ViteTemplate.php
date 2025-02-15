@@ -16,7 +16,7 @@ use DecodeLabs\Zest\Template;
 
 class ViteTemplate extends Template
 {
-    protected const File = __DIR__ . '/vite.template';
+    protected const string File = __DIR__ . '/vite.template';
 
     protected Config $config;
 

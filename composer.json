@@ -9,22 +9,23 @@
             "email": "tom@inflatablecookie.com"
         } ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.4",
 
-        "decodelabs/archetype": "^0.3.6",
-        "decodelabs/clip": "^0.3.4",
-        "decodelabs/collections": "^0.9",
-        "decodelabs/exceptional": "^0.4.3",
-        "decodelabs/genesis": "^0.9",
-        "decodelabs/lucid": "^0.4.7",
-        "decodelabs/overpass": "^0.2.6",
-        "decodelabs/terminus": "^0.10",
-        "decodelabs/veneer": "^0.11.6"
+        "decodelabs/archetype": "^0.3.8",
+        "decodelabs/clip": "^0.3.16",
+        "decodelabs/coercion": "^0.2.15",
+        "decodelabs/collections": "^0.10.1",
+        "decodelabs/exceptional": "^0.5.3",
+        "decodelabs/genesis": "^0.10",
+        "decodelabs/lucid": "^0.5",
+        "decodelabs/overpass": "^0.2.8",
+        "decodelabs/terminus": "^0.11.1",
+        "decodelabs/veneer": "^0.12.3"
     },
     "require-dev": {
         "ext-pcntl": "*",
 
-        "decodelabs/phpstan-decodelabs": "^0.6.1"
+        "decodelabs/phpstan-decodelabs": "^0.7"
     },
     "autoload": {
         "psr-4": {
