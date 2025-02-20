@@ -21,7 +21,7 @@ trait ViteTrait
         Cli::$command
             ->addArgument('-config=vite', 'Config name');
 
-        $output = Coercion::toString(Cli::$command['config']);
+        $output = Coercion::asString(Cli::$command['config']);
 
         if (
             $output === 'vite' ||

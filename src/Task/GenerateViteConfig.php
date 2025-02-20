@@ -34,7 +34,7 @@ class GenerateViteConfig implements Task, BeforeHook
         $this->config = Zest::loadConfig();
 
         $this->config->loadDefaults(
-            Coercion::toString(Cli::$command['defaults'])
+            Coercion::asString(Cli::$command['defaults'])
         );
 
         return true;

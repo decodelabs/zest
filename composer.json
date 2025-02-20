@@ -13,10 +13,10 @@
 
         "decodelabs/archetype": "^0.3.8",
         "decodelabs/clip": "^0.3.16",
-        "decodelabs/coercion": "^0.2.15",
+        "decodelabs/coercion": "^0.3",
         "decodelabs/collections": "^0.10.1",
         "decodelabs/exceptional": "^0.5.3",
-        "decodelabs/genesis": "^0.10",
+        "decodelabs/genesis": "^0.11",
         "decodelabs/lucid": "^0.5",
         "decodelabs/overpass": "^0.2.8",
         "decodelabs/terminus": "^0.11.1",

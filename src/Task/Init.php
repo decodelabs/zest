@@ -28,7 +28,7 @@ class Init implements Task
             return false;
         }
 
-        if (!Zest::run('generate-vite-config', Coercion::toString(Cli::$command['defaults']))) {
+        if (!Zest::run('generate-vite-config', Coercion::asString(Cli::$command['defaults']))) {
             return false;
         }
 
