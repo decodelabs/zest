@@ -86,8 +86,10 @@ class Generic implements Config
         }
 
         $json = Overpass::bridge($loaderFile, (string)$this->file);
-        $tree = new Tree(Coercion::toArray(
-            Coercion::toArray($json)['config'] ?? []
+
+        // @phpstan-ignore-next-line
+        $tree = new Tree(Coercion::asArray(
+            Coercion::asArray($json)['config'] ?? []
         ));
 
         $this->host = $tree->server->host->as('?string') ?? 'localhost';

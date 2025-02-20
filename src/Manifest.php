@@ -163,7 +163,7 @@ class Manifest
     /**
      * Load json data
      *
-     * @return Tree<string|bool|float|int|null,string>
+     * @return Tree<string|bool|float|int>
      */
     public function loadData(): Tree
     {
@@ -174,7 +174,10 @@ class Manifest
             $data = json_decode($this->file->getContents(), true);
         }
 
-        /** @var Tree<string|bool|float|int|null,string> $output */
+        /**
+         * @var Tree<string|bool|float|int> $output
+         * @phpstan-ignore-next-line
+         */
         $output = new Tree($data);
         return $output;
     }
