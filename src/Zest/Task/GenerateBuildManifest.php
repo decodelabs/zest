@@ -27,7 +27,7 @@ class GenerateBuildManifest implements Task
         $configName = $this->getConfigFileName();
         $config = Zest::loadConfig($configName);
 
-        Cli::info('Generating dev Zest manifest');
+        Cli::info('Generating build Zest manifest');
 
         Manifest::generateProduction(
             $this->getManifestFile($config),
