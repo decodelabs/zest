@@ -15,7 +15,7 @@ use DecodeLabs\Clip\Controller\Generic as GenericController;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Overpass\Context as OverpassContext;
 use DecodeLabs\Veneer\Plugin;
-use DecodeLabs\Zest\Config\Generic as GenericConfig;
+use DecodeLabs\Zest\Config\Vite as ViteConfig;
 
 class Controller extends GenericController implements ControllerInterface
 {
@@ -54,7 +54,7 @@ class Controller extends GenericController implements ControllerInterface
 
     public function loadConfig(
         ?string $name = null
-    ): Config {
-        return new GenericConfig($this, $name);
+    ): ViteConfig {
+        return new ViteConfig($this, $name);
     }
 }

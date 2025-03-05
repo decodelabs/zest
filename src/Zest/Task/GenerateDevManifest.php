@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Zest
  * @license http://opensource.org/licenses/MIT
@@ -6,14 +7,16 @@
 
 declare(strict_types=1);
 
+declare(ticks=1);
+
 namespace DecodeLabs\Zest\Task;
 
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Terminus;
+use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Zest;
 use DecodeLabs\Zest\Manifest;
 
-class Build implements Task
+class GenerateDevManifest implements Task
 {
     use ViteTrait;
 
@@ -21,23 +24,12 @@ class Build implements Task
     {
         Zest::checkPackage();
 
-        Terminus::info('Building assets');
-        Terminus::newLine();
-
         $configName = $this->getConfigFileName();
-
-        if (!Zest::$package->runNpx(
-            'vite',
-            'build',
-            ...$this->getBuildArguments($configName)
-        )) {
-            return false;
-        }
-
-        Terminus::newLine();
         $config = Zest::loadConfig($configName);
 
-        Manifest::generateProduction(
+        Cli::info('Generating dev Zest manifest');
+
+        Manifest::generateDev(
             $this->getManifestFile($config),
             $config
         );

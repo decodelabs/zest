@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Zest
  * @license http://opensource.org/licenses/MIT
@@ -274,10 +275,10 @@ class Manifest
         }
 
         $data = $output->loadData();
-        $prefix = trim((string)$config->getUrlPrefix(), '/');
+        $prefix = trim((string)$config->urlPrefix, '/');
 
-        $publicDir = (string)$config->getPublicDir();
-        $outDir = (string)$config->getOutDir();
+        $publicDir = (string)$config->publicDir;
+        $outDir = (string)$config->outDir;
 
         if (str_starts_with($outDir, $publicDir)) {
             $prefix .= '/' . trim(substr($outDir, strlen($publicDir)), '/');
@@ -334,13 +335,13 @@ class Manifest
             $file = Atlas::file($file);
         }
 
-        $url = $config->shouldUseHttps() ? 'https' : 'http';
-        $url .= '://' . $config->getHost() . ':' . $config->getPort();
-        $url .= '/' . trim((string)$config->getUrlPrefix(), '/');
+        $url = $config->https ? 'https' : 'http';
+        $url .= '://' . $config->host . ':' . $config->port;
+        $url .= '/' . trim((string)$config->urlPrefix, '/');
         $url = rtrim($url, '/');
 
         $output = new static($file, true);
-        $entry = $config->getEntry() ?? 'src/main.js';
+        $entry = $config->entry ?? 'src/main.js';
 
         $output->addHeadJs([
             $url . '/@vite/client' => static::getJsFileAttrs('@vite/client')

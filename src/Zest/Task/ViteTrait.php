@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Zest
  * @license http://opensource.org/licenses/MIT
@@ -72,13 +73,13 @@ trait ViteTrait
         Config $config
     ): File {
         $dir = Zest::$package->rootDir->getDir(
-            $config->getOutDir() ?? 'dist'
+            $config->outDir
         );
 
-        $file = $dir->getFile($config->getManifestName());
+        $file = $dir->getFile($config->manifestName);
 
         if (!$file->exists()) {
-            $file = $dir->getFile('.vite/' . $config->getManifestName());
+            $file = $dir->getFile('.vite/' . $config->manifestName);
         }
 
         return $file;
