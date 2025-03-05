@@ -20,9 +20,14 @@ trait ViteTrait
     protected function getConfigFileName(): ?string
     {
         Cli::$command
+            ->addArgument('?confName', 'Config name')
             ->addArgument('-config=vite', 'Config name');
 
-        $output = Coercion::asString(Cli::$command['config']);
+        $output = Coercion::asString(
+            Cli::$command['confName'] ??
+                Cli::$command['config'] ??
+                'vite'
+        );
 
         if (
             $output === 'vite' ||

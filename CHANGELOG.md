@@ -1,3 +1,5 @@
+## v0.3.1 (2025-03-05)
+* Accept config name as unnamed argument
 * Fixed message in build manifest generator
 
 ## v0.3.0 (2025-03-05)
