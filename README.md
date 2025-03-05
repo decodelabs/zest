@@ -64,11 +64,11 @@ import zest from '@decodelabs/vite-plugin-zest'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  plugins: [
-    zest({
-      buildOnExit: true
-    })
-  ],
+    plugins: [
+        zest({
+            buildOnExit: true
+        })
+    ],
 })
 ```
 
