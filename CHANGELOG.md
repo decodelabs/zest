@@ -1,3 +1,4 @@
+## v0.3.0 (2025-03-05)
 * Moved manifest and config generation to vite plugin
 * Added Harvest asset loader middleware
 * Improved config handling
