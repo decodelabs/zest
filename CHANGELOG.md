@@ -1,3 +1,8 @@
+* Moved manifest and config generation to vite plugin
+* Added Harvest asset loader middleware
+* Improved config handling
+* Simplified vite config generation
+
 ## v0.2.22 (2025-02-20)
 * Upgraded Coercion dependency
 * Upgraded Genesis dependency

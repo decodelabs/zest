@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Zest
  * @license http://opensource.org/licenses/MIT
@@ -17,7 +18,8 @@ class InstallDependencies implements Task
      * @var array<string,string>
      */
     protected const array DevPackages = [
-        'vite' => '^6'
+        'vite' => '^6',
+        '@decodelabs/vite-plugin-zest' => '^0.1.1',
     ];
 
     public function execute(): bool

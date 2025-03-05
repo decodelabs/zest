@@ -18,17 +18,22 @@ use DecodeLabs\Overpass;
 use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Controller;
 
-class Generic implements Config
+class Vite implements Config
 {
-    protected ?string $host = null;
-    protected ?int $port = null;
-    protected ?bool $https = false;
-    protected ?string $outDir = null;
-    protected ?string $assetsDir = null;
-    protected ?string $publicDir = null;
-    protected ?string $urlPrefix = null;
-    protected ?string $entry = null;
-    protected string $manifestName = 'manifest.json';
+    public string $path {
+        get => $this->controller->package->rootDir->getPath();
+    }
+
+    protected(set) ?string $host = null;
+    protected(set) ?int $port = null;
+    protected(set) ?bool $https = false;
+    protected(set) string $outDir = 'dist';
+    protected(set) string $assetsDir = 'assets';
+    protected(set) string $publicDir = 'public';
+    protected(set) array $aliases = [];
+    protected(set) ?string $urlPrefix = null;
+    protected(set) ?string $entry = null;
+    protected(set) string $manifestName = 'manifest.json';
 
     protected File $file;
     protected Controller $controller;
@@ -57,6 +62,10 @@ class Generic implements Config
     public function reload(): void
     {
         if (!$this->file->exists()) {
+            return;
+        }
+
+        if ($this->loadPhpConfig()) {
             return;
         }
 
@@ -98,6 +107,8 @@ class Generic implements Config
         $this->outDir = $tree->build->outDir->as('?string') ?? 'dist';
         $this->assetsDir = $tree->build->assetsDir->as('?string') ?? 'assets';
         $this->publicDir = $tree->publicDir->as('?string') ?? 'public';
+        // @phpstan-ignore-next-line
+        $this->aliases = $tree->resolve->alias->as('string[]');
         $this->urlPrefix = $tree->base->as('?string') ?? '/';
         $this->entry = $tree->build->rollupOptions->input->as('?string') ?? 'src/main.js';
 
@@ -108,6 +119,35 @@ class Generic implements Config
         } else {
             $this->manifestName = 'manifest.json';
         }
+    }
+
+    protected function loadPhpConfig(): bool
+    {
+        $path = preg_replace('/\.js$/', '.php', $this->file->getPath());
+        $file = Atlas::file((string)$path);
+
+        if (!$file->exists()) {
+            return false;
+        }
+
+        $config = require $file;
+
+        if (!$config instanceof Generic) {
+            return false;
+        }
+
+        $this->host = $config->host ?? 'localhost';
+        $this->port = $config->port;
+        $this->https = $config->https ?? false;
+        $this->outDir = $config->outDir;
+        $this->assetsDir = $config->assetsDir;
+        $this->publicDir = $config->publicDir;
+        $this->aliases = $config->aliases;
+        $this->urlPrefix = $config->urlPrefix;
+        $this->entry = $config->entry ?? 'src/main.js';
+        $this->manifestName = $config->manifestName;
+
+        return true;
     }
 
 
@@ -137,80 +177,5 @@ class Generic implements Config
                 $this->manifestName = 'manifest.json';
                 break;
         }
-    }
-
-
-
-    /**
-     * Get host
-     */
-    public function getHost(): ?string
-    {
-        return $this->host;
-    }
-
-
-    /**
-     * Get port
-     */
-    public function getPort(): ?int
-    {
-        return $this->port;
-    }
-
-    /**
-     * Should use HTTPS
-     */
-    public function shouldUseHttps(): bool
-    {
-        return $this->https ?? false;
-    }
-
-    /**
-     * Get build dir
-     */
-    public function getOutDir(): ?string
-    {
-        return $this->outDir;
-    }
-
-    /**
-     * Get assets dir
-     */
-    public function getAssetsDir(): ?string
-    {
-        return $this->assetsDir;
-    }
-
-    /**
-     * Get public dir
-     */
-    public function getPublicDir(): ?string
-    {
-        return $this->publicDir;
-    }
-
-    /**
-     * Get url prefix
-     */
-    public function getUrlPrefix(): ?string
-    {
-        return $this->urlPrefix;
-    }
-
-    /**
-     * Get main entry file
-     */
-    public function getEntry(): ?string
-    {
-        return $this->entry;
-    }
-
-    /**
-     * Get manifest name
-     */
-    public function getManifestName(): string
-    {
-        return $this->manifestName;
     }
 }

@@ -49,6 +49,30 @@ effigy zest build
 Build will trigger automatically when the dev server is closed.
 
 
+### Existing projects
+
+If installing in an existing vite project, make sure to install the Zest plugin:
+
+```bash
+npm install -D @decodelabs/vite-plugin-zest
+```
+
+Then add it to your Vite config:
+
+```javascript
+import zest from '@decodelabs/vite-plugin-zest'
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  plugins: [
+    zest({
+      buildOnExit: true
+    })
+  ],
+})
+```
+
+
 
 ### View consumption
 

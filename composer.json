@@ -20,16 +20,19 @@
         "decodelabs/lucid": "^0.5",
         "decodelabs/overpass": "^0.2.8",
         "decodelabs/terminus": "^0.11.1",
+        "decodelabs/typify": "^0.3.2",
         "decodelabs/veneer": "^0.12.3"
     },
     "require-dev": {
         "ext-pcntl": "*",
 
-        "decodelabs/phpstan-decodelabs": "^0.7"
+        "decodelabs/phpstan-decodelabs": "^0.7",
+        "decodelabs/harvest": "^0.4.2"
     },
     "autoload": {
         "psr-4": {
-            "DecodeLabs\\Zest\\": "src/"
+            "DecodeLabs\\Zest\\": "src/Zest/",
+            "DecodeLabs\\Harvest\\": "src/Harvest/"
         }
     },
     "bin": [
@@ -37,7 +40,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.2.x-dev"
+            "dev-develop": "0.3.x-dev"
         }
     },
     "repositories": {

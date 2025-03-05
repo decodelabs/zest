@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Zest
  * @license http://opensource.org/licenses/MIT
@@ -16,7 +17,7 @@ use DecodeLabs\Coercion;
 use DecodeLabs\Overpass;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Zest;
-use DecodeLabs\Zest\Config;
+use DecodeLabs\Zest\Config\Vite as Config;
 use DecodeLabs\Zest\Task\GenerateViteConfig\ViteTemplate;
 use DecodeLabs\Zest\Template;
 
@@ -58,20 +59,9 @@ class GenerateViteConfig implements Task, BeforeHook
     ): bool {
         $this->config->reload();
 
-        // Ensure index.html exists
-        $index = Overpass::$rootDir->getFile('index.html');
-
-        if (!$index->exists()) {
-            (new Template(
-                Zest::getController(),
-                __DIR__ . '/GenerateViteConfig/index.template'
-            ))
-                ->saveTo($index);
-        }
-
 
         // Ensure main.js exists
-        if (null !== ($entry = $this->config->getEntry())) {
+        if (null !== ($entry = $this->config->entry)) {
             $file = Zest::$package->rootDir->getFile($entry);
 
             if (!$file->exists()) {
