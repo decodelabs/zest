@@ -50,5 +50,13 @@ class Generic implements Config
         }
 
         $this->aliases = $aliases;
+
+        if(!str_starts_with((string)$this->path, '/')) {
+            if(false === ($newPath = realpath($path . '/' . $this->path))) {
+                $newPath = $path . '/' . $this->path;
+            }
+
+            $this->path = $newPath;
+        }
     }
 }

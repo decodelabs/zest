@@ -9,9 +9,10 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Harvest\Middleware;
 
-use DecodeLabs\Exceptional;
+use DecodeLabs\Coercion;
 use DecodeLabs\Genesis;
 use DecodeLabs\Harvest;
+use DecodeLabs\Iota;
 use DecodeLabs\Typify;
 use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Config\Generic as GenericConfig;
@@ -28,34 +29,63 @@ class Zest implements Middleware
     protected array $configs;
 
     /**
-     * @param ?array<string,Config> $configs
+     * @param ?array<string,string|Config> $configs
      */
     public function __construct(
         ?array $configs = null
     ) {
         if ($configs === null) {
-            if (class_exists(Genesis::class)) {
-                $path = Genesis::$hub->applicationPath;
-            } else {
-                $path = getcwd();
+            $iota = Iota::loadStatic('zest');
+
+            if(
+                $iota->has('__manifest') &&
+                !$iota->mutable
+            ) {
+                // Fetch manifest if in production
+                /** @var array<string> */
+                $list = Coercion::asArray($iota->return('__manifest'));
+            } elseif($iota->mutable) {
+                // Scan for configs
+                $list = $iota->scan(function($file) {
+                    return $file !== '__manifest';
+                });
+
+                $list = iterator_to_array($list);
+                $export = var_export($list, true);
+
+                $code = <<<PHP
+                    <?php
+                    return $export;
+                    PHP;
+
+                if($code !== $iota->fetch('__manifest')) {
+                    $iota->store('__manifest', $code);
+                }
             }
 
-            if (is_file($path . '/vite.config.php')) {
-                $config = require $path . '/vite.config.php';
+            $configs = [];
 
-                if (!$config instanceof Config) {
-                    throw Exceptional::UnexpectedValue(
-                        message: 'Invalid vite config'
-                    );
+            foreach($list ?? [] as $name) {
+                $configs[$name] = $iota->returnAsType(
+                    key: $name,
+                    type: Config::class
+                );
+            }
+        } else {
+            // Resolve config names
+            foreach($configs as $key => $config) {
+                if(is_string($config)) {
+                    $filename = $config === 'default' ?
+                        'vite.config.php' :
+                        'vite.'.$config.'.config.php';
+
+                    $configs[$key] = Iota::loadStatic('zest')->return($filename);
                 }
-
-                $configs = [
-                    'default' => $config
-                ];
             }
         }
 
-        $this->configs = $configs ?? [];
+        /** @var array<string,Config> $configs */
+        $this->configs = $configs;
     }
 
     /**
@@ -143,8 +173,10 @@ class Zest implements Middleware
         }
 
         $path = ltrim($path, '/');
+
         return new GenericConfig(
             path: $rootPath,
+            outDir: '@__out_of_scope__@',
             publicDir: 'public'
         );
     }
