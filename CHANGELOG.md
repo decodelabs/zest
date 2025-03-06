@@ -1,3 +1,6 @@
+## v0.3.3 (2025-03-06)
+* Fixed root path public check
+
 ## v0.3.2 (2025-03-06)
 * Added default public dir loader to middleware
 
