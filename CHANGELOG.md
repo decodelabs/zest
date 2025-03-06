@@ -1,3 +1,6 @@
+## v0.4.0 (2025-03-06)
+* Switched to Iota for config storage
+
 ## v0.3.3 (2025-03-06)
 * Fixed root path public check
 
