@@ -1,3 +1,6 @@
+## v0.3.2 (2025-03-06)
+* Added default public dir loader to middleware
+
 ## v0.3.1 (2025-03-05)
 * Accept config name as unnamed argument
 * Fixed message in build manifest generator
