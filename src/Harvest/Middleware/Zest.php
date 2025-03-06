@@ -138,7 +138,7 @@ class Zest implements Middleware
             return null;
         }
 
-        if (!is_dir($path . '/public')) {
+        if (!is_dir($rootPath . '/public')) {
             return null;
         }
 
