@@ -296,19 +296,22 @@ class Manifest
                 $file['isEntry'] &&
                 str_ends_with((string)$file['file'], '.js')
             ) {
-                $output->bodyJs[$prefix . '/' . $file['file']] = static::getJsFileAttrs((string)$file['file']);
+                $filePath = ltrim($prefix . '/' . $file['file'], '.');
+                $output->bodyJs[$filePath] = static::getJsFileAttrs((string)$file['file']);
             }
 
             // CSS
             if (isset($file->css)) {
                 foreach ($file->css as $cssFile) {
-                    $output->css[$prefix . '/' . $cssFile->getValue()] = [];
+                    $filePath = ltrim($prefix . '/' . $cssFile->getValue(), '.');
+                    $output->css[$filePath] = [];
                 }
             } elseif (
                 str_ends_with((string)$file['src'], '.css') ||
                 str_ends_with((string)$file['file'], '.css')
             ) {
-                $styles[$prefix . '/' . $file['file']] = [];
+                $filePath = ltrim($prefix . '/' . $file['file'], '.');
+                $styles[$filePath] = [];
             }
         }
 

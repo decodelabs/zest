@@ -1,3 +1,6 @@
+## v0.4.3 (2025-03-07)
+* Strip leading . from manifest paths
+
 ## v0.4.2 (2025-03-07)
 * Map paths when outDir is in publicDir
 * Use Iota in Vite config loader
