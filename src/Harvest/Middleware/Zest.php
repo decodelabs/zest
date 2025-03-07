@@ -123,22 +123,16 @@ class Zest implements Middleware
         }
 
         $root = rtrim($config->path, '/');
+        $path = $root . '/' . $config->publicDir . '/' . $path;
 
-        $paths = [
-            $root . '/' . $config->outDir . '/' . $path,
-            $root . '/' . $config->publicDir . '/' . $path
-        ];
-
-        foreach ($paths as $path) {
-            if (is_file($path)) {
-                return Harvest::stream(
-                    body: $path,
-                    headers: [
-                        'Content-Type' => Typify::detect($path),
-                        'Cache-Control' => 'public, max-age=31536000'
-                    ]
-                );
-            }
+        if (is_file($path)) {
+            return Harvest::stream(
+                body: $path,
+                headers: [
+                    'Content-Type' => Typify::detect($path),
+                    'Cache-Control' => 'public, max-age=31536000'
+                ]
+            );
         }
 
         return null;
@@ -153,7 +147,7 @@ class Zest implements Middleware
                 $check = substr($config->outDir, strlen($config->publicDir));
 
                 if(str_starts_with($path, $check)) {
-                    $path = substr($path, strlen($check));
+                    $path = ltrim($path, '/');
                     return $config;
                 }
             }

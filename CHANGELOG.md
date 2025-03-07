@@ -1,3 +1,6 @@
+## v0.4.4 (2025-03-07)
+* Fixed mergeToPublicDir handling
+
 ## v0.4.3 (2025-03-07)
 * Strip leading . from manifest paths
 
