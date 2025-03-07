@@ -148,6 +148,17 @@ class Zest implements Middleware
         string &$path
     ): ?Config {
         foreach ($this->configs as $config) {
+            // OutDir in public - map paths
+            if(str_starts_with($config->outDir, $config->publicDir)) {
+                $check = substr($config->outDir, strlen($config->publicDir));
+
+                if(str_starts_with($path, $check)) {
+                    $path = substr($path, strlen($check));
+                    return $config;
+                }
+            }
+
+            // Test urlPrefix against path
             if (null !== ($prefix = $config->urlPrefix)) {
                 $prefix = '/' . trim($prefix, '/') . '/';
 
