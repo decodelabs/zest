@@ -14,6 +14,7 @@ use DecodeLabs\Atlas\File;
 use DecodeLabs\Coercion;
 use DecodeLabs\Collections\Tree;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Iota;
 use DecodeLabs\Overpass;
 use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Controller;
@@ -123,18 +124,17 @@ class Vite implements Config
 
     protected function loadPhpConfig(): bool
     {
-        $path = preg_replace('/\.js$/', '.php', $this->file->getPath());
-        $file = Atlas::file((string)$path);
+        $iota = Iota::loadStatic('zest');
+        $filename = preg_replace('/\.js$/', '.php', basename($this->file->getPath()));
 
-        if (!$file->exists()) {
+        if(
+            !$filename ||
+            !$iota->has((string)$filename)
+        ) {
             return false;
         }
 
-        $config = require $file;
-
-        if (!$config instanceof Generic) {
-            return false;
-        }
+        $config = $iota->returnAsType($filename, Generic::class);
 
         $this->host = $config->host ?? 'localhost';
         $this->port = $config->port;
