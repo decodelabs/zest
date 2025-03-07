@@ -1,3 +1,6 @@
+## v0.4.1 (2025-03-07)
+* URL decode path in Middleware
+
 ## v0.4.0 (2025-03-06)
 * Switched to Iota for config storage
 

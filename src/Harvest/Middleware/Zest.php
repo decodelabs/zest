@@ -109,7 +109,7 @@ class Zest implements Middleware
     protected function handleAsset(
         Request $request
     ): ?Response {
-        $path = $request->getUri()->getPath();
+        $path = urldecode($request->getUri()->getPath());
 
         if (
             str_contains('../', $path) ||
