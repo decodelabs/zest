@@ -123,6 +123,32 @@ class Zest implements Middleware
         }
 
         $root = rtrim($config->path, '/');
+
+        // Public dir
+        $paths = [
+            $root . '/' . $config->publicDir . '/' . $path
+        ];
+
+        // If not merged to public, also check outDir
+        if(!str_starts_with($config->outDir, $config->publicDir)) {
+            $paths[] = $root . '/' . $config->outDir . '/' . $path;
+        }
+
+        foreach ($paths as $path) {
+            if (is_file($path)) {
+                return Harvest::stream(
+                    body: $path,
+                    headers: [
+                        'Content-Type' => Typify::detect($path),
+                        'Cache-Control' => 'public, max-age=31536000'
+                    ]
+                );
+            }
+        }
+
+
+
+
         $path = $root . '/' . $config->publicDir . '/' . $path;
 
         if (is_file($path)) {

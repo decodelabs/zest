@@ -1,3 +1,6 @@
+## v0.4.5 (2025-03-08)
+* Re-added dist dir lookup if not merged in public
+
 ## v0.4.4 (2025-03-07)
 * Fixed mergeToPublicDir handling
 
