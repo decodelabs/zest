@@ -30,7 +30,7 @@ class Generic implements Config
         protected(set) string $manifestName = 'manifest.json',
     ) {
         if (class_exists(Genesis::class)) {
-            $path = Genesis::$hub->applicationPath;
+            $path = Genesis::$build->path;
         } else {
             $path = getcwd();
         }

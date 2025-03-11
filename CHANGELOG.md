@@ -1,3 +1,6 @@
+## v0.5.0 (2025-03-11)
+* Use assets from Genesis build dir
+
 ## v0.4.5 (2025-03-08)
 * Re-added dist dir lookup if not merged in public
 
