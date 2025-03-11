@@ -17,7 +17,7 @@
         "decodelabs/collections": "^0.10.1",
         "decodelabs/exceptional": "^0.5.3",
         "decodelabs/genesis": "^0.11",
-        "decodelabs/iota": "^0.1.1",
+        "decodelabs/iota": "^0.2",
         "decodelabs/lucid": "^0.5",
         "decodelabs/overpass": "^0.2.8",
         "decodelabs/terminus": "^0.11.1",
@@ -41,7 +41,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.4.x-dev"
+            "dev-develop": "0.5.x-dev"
         }
     },
     "repositories": {

@@ -194,7 +194,7 @@ class Zest implements Middleware
         }
 
         if (class_exists(Genesis::class)) {
-            $rootPath = Genesis::$hub->applicationPath;
+            $rootPath = Genesis::$build->path;
         } elseif (!$rootPath = getcwd()) {
             return null;
         }
