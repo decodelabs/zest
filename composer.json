@@ -14,7 +14,7 @@
         "decodelabs/archetype": "^0.3.8",
         "decodelabs/clip": "^0.3.16",
         "decodelabs/coercion": "^0.3",
-        "decodelabs/collections": "^0.10.1",
+        "decodelabs/collections": "^0.11",
         "decodelabs/exceptional": "^0.5.3",
         "decodelabs/genesis": "^0.11",
         "decodelabs/iota": "^0.2",

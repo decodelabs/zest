@@ -1,3 +1,6 @@
+## v0.5.1 (2025-04-02)
+* Upgraded Collections dependency
+
 ## v0.5.0 (2025-03-11)
 * Use assets from Genesis build dir
 
