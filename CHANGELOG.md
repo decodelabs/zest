@@ -1,3 +1,6 @@
+## v0.5.2 (2025-04-03)
+* Added Horizon Decorator
+
 ## v0.5.1 (2025-04-02)
 * Upgraded Collections dependency
 

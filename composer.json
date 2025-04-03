@@ -28,12 +28,14 @@
         "ext-pcntl": "*",
 
         "decodelabs/phpstan-decodelabs": "^0.7",
-        "decodelabs/harvest": "^0.4.2"
+        "decodelabs/harvest": "^0.4.2",
+        "decodelabs/horizon": "^0.4"
     },
     "autoload": {
         "psr-4": {
             "DecodeLabs\\Zest\\": "src/Zest/",
-            "DecodeLabs\\Harvest\\": "src/Harvest/"
+            "DecodeLabs\\Harvest\\": "src/Harvest/",
+            "DecodeLabs\\Horizon\\": "src/Horizon/"
         }
     },
     "bin": [
