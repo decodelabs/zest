@@ -1,3 +1,6 @@
+## v0.5.3 (2025-04-08)
+* Added support for typescript configs
+
 ## v0.5.2 (2025-04-03)
 * Added Horizon Decorator
 
