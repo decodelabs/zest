@@ -21,6 +21,8 @@ use DecodeLabs\Zest\Controller;
 
 class Vite implements Config
 {
+    public const array Extensions = ['ts', 'mjs', 'cjs', 'js'];
+
     public string $path {
         get => $this->controller->package->rootDir->getPath();
     }
@@ -51,9 +53,16 @@ class Vite implements Config
             $name .= $configName . '.';
         }
 
-        $name .= 'config.js';
+        $name .= 'config';
 
-        $this->file = $controller->package->rootDir->getFile($name);
+        foreach(self::Extensions as $ext) {
+            $this->file = $controller->package->rootDir->getFile($name.'.'.$ext);
+
+            if($this->file->exists()) {
+                break;
+            }
+        }
+
         $this->reload();
     }
 
@@ -111,7 +120,7 @@ class Vite implements Config
         // @phpstan-ignore-next-line
         $this->aliases = $tree->resolve->alias->as('string[]');
         $this->urlPrefix = $tree->base->as('?string') ?? '/';
-        $this->entry = $tree->build->rollupOptions->input->as('?string') ?? 'src/main.js';
+        $this->entry = $tree->build->rollupOptions->input->as('?string') ?? 'src/main.'.$this->getDefaultExtension();
 
         $manifest = $tree->build['manifest'] ?? true;
 
@@ -125,7 +134,12 @@ class Vite implements Config
     protected function loadPhpConfig(): bool
     {
         $iota = Iota::loadStatic('zest');
-        $filename = preg_replace('/\.js$/', '.php', basename($this->file->getPath()));
+
+        $filename = preg_replace(
+            '/\.('.implode('|', self::Extensions).')$/',
+            '.php',
+            basename($this->file->getPath())
+        );
 
         if(
             !$filename ||
@@ -133,6 +147,8 @@ class Vite implements Config
         ) {
             return false;
         }
+
+
 
         $config = $iota->returnAsType($filename, Generic::class);
 
@@ -144,38 +160,32 @@ class Vite implements Config
         $this->publicDir = $config->publicDir;
         $this->aliases = $config->aliases;
         $this->urlPrefix = $config->urlPrefix;
-        $this->entry = $config->entry ?? 'src/main.js';
+        $this->entry = $config->entry ?? 'src/main.'.$this->getDefaultExtension();
         $this->manifestName = $config->manifestName;
 
         return true;
     }
 
 
-    public function loadDefaults(
-        ?string $name = null
-    ): void {
-        switch ($name) {
-            case 'df-r7':
-                $this->host = 'localhost';
-                $this->port = rand(3000, 9999);
-                $this->outDir = 'assets/zest';
-                $this->assetsDir = '.';
-                $this->publicDir = 'assets';
-                $this->urlPrefix = '/theme/' . $this->file->getParent()?->getName() . '/';
-                $this->entry = 'src/main.js';
-                $this->manifestName = 'manifest.json';
-                break;
+    public function loadDefaults(): void
+    {
+        $this->host = 'localhost';
+        $this->port = rand(3000, 9999);
+        $this->outDir = 'dist';
+        $this->assetsDir = 'assets';
+        $this->publicDir = 'public';
+        $this->urlPrefix = null;
+        $this->entry = 'src/main.'.$this->getDefaultExtension();
+        $this->manifestName = 'manifest.json';
+    }
 
-            default:
-                $this->host = 'localhost';
-                $this->port = rand(3000, 9999);
-                $this->outDir = 'dist';
-                $this->assetsDir = 'assets';
-                $this->publicDir = 'public';
-                $this->urlPrefix = null;
-                $this->entry = 'src/main.js';
-                $this->manifestName = 'manifest.json';
-                break;
+
+    private function getDefaultExtension(): string
+    {
+        if(str_ends_with(basename($this->file->getPath()), '.ts')) {
+            return 'ts';
+        } else {
+            return 'js';
         }
     }
 }
