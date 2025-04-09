@@ -13,6 +13,7 @@ use DecodeLabs\Coercion;
 use DecodeLabs\Genesis;
 use DecodeLabs\Harvest;
 use DecodeLabs\Iota;
+use DecodeLabs\Monarch;
 use DecodeLabs\Typify;
 use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Config\Generic as GenericConfig;
@@ -193,11 +194,7 @@ class Zest implements Middleware
             return $config;
         }
 
-        if (class_exists(Genesis::class)) {
-            $rootPath = Genesis::$build->path;
-        } elseif (!$rootPath = getcwd()) {
-            return null;
-        }
+        $rootPath = Monarch::$paths->run;
 
         if (!is_dir($rootPath . '/public')) {
             return null;

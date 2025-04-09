@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Zest\Config;
 
 use DecodeLabs\Exceptional;
-use DecodeLabs\Genesis;
+use DecodeLabs\Monarch;
 use DecodeLabs\Zest\Config;
 
 class Generic implements Config
@@ -29,11 +29,7 @@ class Generic implements Config
         protected(set) ?string $entry = null,
         protected(set) string $manifestName = 'manifest.json',
     ) {
-        if (class_exists(Genesis::class)) {
-            $path = Genesis::$build->path;
-        } else {
-            $path = getcwd();
-        }
+        $path = Monarch::$paths->run;
 
         foreach ($aliases as $alias => $aliasPath) {
             if (str_starts_with($aliasPath, '.')) {

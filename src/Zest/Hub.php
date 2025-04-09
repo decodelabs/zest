@@ -12,8 +12,8 @@ use DecodeLabs\Archetype;
 use DecodeLabs\Clip\Controller as ControllerInterface;
 use DecodeLabs\Clip\Hub as ClipHub;
 use DecodeLabs\Clip\Task as TaskInterface;
-use DecodeLabs\Glitch;
-use DecodeLabs\Terminus;
+use DecodeLabs\Monarch;
+use DecodeLabs\Pandora\Container;
 use DecodeLabs\Veneer;
 use DecodeLabs\Zest;
 
@@ -26,9 +26,11 @@ class Hub extends ClipHub
         /** @phpstan-ignore-next-line */
         Archetype::map(TaskInterface::class, Task::class);
 
-        $controller = new Controller();
-        $this->context->container->bindShared(ControllerInterface::class, $controller);
-        $this->context->container->bindShared(Controller::class, $controller);
+        if(Monarch::$container instanceof Container) {
+            $controller = new Controller();
+            Monarch::$container->bindShared(ControllerInterface::class, $controller);
+            Monarch::$container->bindShared(Controller::class, $controller);
+        }
 
         /*
         set_exception_handler(function ($e) use ($controller) {
