@@ -14,6 +14,7 @@ use DecodeLabs\Genesis;
 use DecodeLabs\Iota;
 use DecodeLabs\Horizon\Decorator;
 use DecodeLabs\Horizon\Page;
+use DecodeLabs\Monarch;
 use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Manifest;
 
@@ -67,8 +68,8 @@ class Zest implements Decorator
             !str_contains($manifest, '/')
         ) {
             $manifest = $this->findManifest($manifest);
-        } elseif(class_exists(Genesis::class)) {
-            $manifest = Genesis::resolvePath($manifest);
+        } else {
+            $manifest = Monarch::$paths->resolve($manifest);
         }
 
         return Manifest::load($manifest);
@@ -107,13 +108,7 @@ class Zest implements Decorator
 
     private function getDefaultManifestPath(): string
     {
-        if(class_exists(Genesis::class)) {
-            $appPath = Genesis::$hub->applicationPath;
-        } else {
-            $appPath = getcwd();
-        }
-
-        return $appPath . '/public/assets/zest/.vite/manifest.json';
+        return Monarch::$paths->run . '/public/assets/zest/.vite/manifest.json';
     }
 
     private function normalizeUrl(

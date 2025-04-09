@@ -1,3 +1,7 @@
+## v0.6.0 (2025-04-09)
+* Upgraded Bootstrap structure
+* Replaced Genesis info with Monarch
+
 ## v0.5.3 (2025-04-08)
 * Added support for typescript configs
 

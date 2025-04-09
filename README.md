@@ -80,14 +80,14 @@ To make use of Zest, you will need to consume the generated assets from the mani
 As it stands, there are no pre-built view adapters (there are many different view libraries out there!!), however you can adapt the one you use like this:
 
 ```php
-use DecodeLabs\Genesis;
+use DecodeLabs\Monarch;
 use DecodeLabs\Zest\Manifest;
 
 class ViewPlugin {
 
     public function apply(View $view): void {
         $manifest = Manifest::load(
-            Genesis::$hub->getApplicationPath() . '/my-theme/manifest.json'
+            Monarch::$paths->root . '/my-theme/manifest.json'
         );
 
         foreach ($manifest->getCssData() as $file => $attr) {
