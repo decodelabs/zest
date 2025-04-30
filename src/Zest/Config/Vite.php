@@ -15,7 +15,7 @@ use DecodeLabs\Coercion;
 use DecodeLabs\Collections\Tree;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Iota;
-use DecodeLabs\Overpass;
+use DecodeLabs\Overpass\Project;
 use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Controller;
 
@@ -24,7 +24,7 @@ class Vite implements Config
     public const array Extensions = ['ts', 'mjs', 'cjs', 'js'];
 
     public string $path {
-        get => $this->controller->package->rootDir->getPath();
+        get => $this->controller->project->rootDir->getPath();
     }
 
     protected(set) ?string $host = null;
@@ -56,7 +56,7 @@ class Vite implements Config
         $name .= 'config';
 
         foreach(self::Extensions as $ext) {
-            $this->file = $controller->package->rootDir->getFile($name.'.'.$ext);
+            $this->file = $controller->project->rootDir->getFile($name.'.'.$ext);
 
             if($this->file->exists()) {
                 break;
@@ -104,7 +104,7 @@ class Vite implements Config
             );
         }
 
-        $json = Overpass::bridge($loaderFile, (string)$this->file);
+        $json = new Project()->bridge($loaderFile, (string)$this->file);
 
         // @phpstan-ignore-next-line
         $tree = new Tree(Coercion::asArray(

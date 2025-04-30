@@ -13,8 +13,7 @@ use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Clip\Task\BeforeHook;
 use DecodeLabs\Clip\Task\GenerateFileTrait;
-use DecodeLabs\Coercion;
-use DecodeLabs\Overpass;
+use DecodeLabs\Overpass\Project;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Zest;
 use DecodeLabs\Zest\Config\Vite as Config;
@@ -40,7 +39,7 @@ class GenerateViteConfig implements Task, BeforeHook
 
     protected function getTargetFile(): File
     {
-        return Overpass::$rootDir->getFile('vite.config.js');
+        return new Project()->rootDir->getFile('vite.config.js');
     }
 
     protected function getTemplate(): ViteTemplate
@@ -59,7 +58,7 @@ class GenerateViteConfig implements Task, BeforeHook
 
         // Ensure main.js exists
         if (null !== ($entry = $this->config->entry)) {
-            $file = Zest::$package->rootDir->getFile($entry);
+            $file = Zest::$project->rootDir->getFile($entry);
 
             if (!$file->exists()) {
                 $file->putContents('console.log("hello world")');

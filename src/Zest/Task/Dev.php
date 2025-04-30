@@ -22,11 +22,11 @@ class Dev implements Task
 
     public function execute(): bool
     {
-        Zest::checkPackage();
+        Zest::checkProject();
 
         $configName = $this->getConfigFileName();
 
-        return Zest::$package->runNpx(
+        return Zest::$project->runPackage(
             'vite',
             $this->getConfigArgument($configName)
         );

@@ -1,3 +1,8 @@
+## v0.7.0 (2025-04-30)
+* Upgraded Overpass to v0.3.0
+* Renamed Overpass property to $project
+* Updated Overpass method calls
+
 ## v0.6.0 (2025-04-09)
 * Upgraded Bootstrap structure
 * Replaced Genesis info with Monarch

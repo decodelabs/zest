@@ -20,14 +20,14 @@ class Build implements Task
 
     public function execute(): bool
     {
-        Zest::checkPackage();
+        Zest::checkProject();
 
         Terminus::info('Building assets');
         Terminus::newLine();
 
         $configName = $this->getConfigFileName();
 
-        return Zest::$package->runNpx(
+        return Zest::$project->runPackage(
             'vite',
             'build',
             ...$this->getBuildArguments($configName)

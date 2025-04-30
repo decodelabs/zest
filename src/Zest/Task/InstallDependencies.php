@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Zest\Task;
 
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Overpass;
+use DecodeLabs\Overpass\Project;
 
 class InstallDependencies implements Task
 {
@@ -24,14 +24,15 @@ class InstallDependencies implements Task
 
     public function execute(): bool
     {
+        $project = new Project();
         $packages = $devPackages = [];
 
         foreach (static::DevPackages as $name => $version) {
-            $devPackages[$name] = Overpass::preparePackageInstallName($name, $version);
+            $devPackages[$name] = $name.'@'.$version;
         }
 
-        //Overpass::install(...array_values($packages));
-        Overpass::installDev(...array_values($devPackages));
+        //$project->install(...array_values($packages));
+        $project->installDev(...array_values($devPackages));
 
         return true;
     }

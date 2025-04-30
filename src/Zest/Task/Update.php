@@ -9,14 +9,14 @@ declare(strict_types=1);
 namespace DecodeLabs\Zest\Task;
 
 use DecodeLabs\Clip\Task;
-use DecodeLabs\Overpass;
+use DecodeLabs\Overpass\Project;
 
 class Update implements Task
 {
     public function execute(): bool
     {
-        Overpass::runNpm('update');
+        return new Project()->update();
 
-        return true;
+        //return true;
     }
 }

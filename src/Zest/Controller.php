@@ -13,32 +13,31 @@ use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Clip\Controller as ControllerInterface;
 use DecodeLabs\Clip\Controller\Generic as GenericController;
 use DecodeLabs\Exceptional;
-use DecodeLabs\Overpass\Context as OverpassContext;
+use DecodeLabs\Overpass\Project;
 use DecodeLabs\Veneer\Plugin;
 use DecodeLabs\Zest\Config\Vite as ViteConfig;
 
 class Controller extends GenericController implements ControllerInterface
 {
     #[Plugin]
-    public OverpassContext $package;
+    public Project $project;
 
     public function __construct(
         ?Dir $dir = null
     ) {
-        // TODO: load implementation from container?
-        $this->package = new OverpassContext($dir);
+        $this->project = new Project($dir);
     }
 
 
 
     /**
-     * Check in package
+     * Check in project
      */
-    public function checkPackage(): void
+    public function checkProject(): void
     {
-        if (!$this->package->isInPackage()) {
+        if (!$this->project->isInitialised()) {
             throw Exceptional::Runtime(
-                message: 'Not running within a node.js package'
+                message: 'Not running within a node.js project'
             );
         }
     }

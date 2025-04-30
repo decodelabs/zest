@@ -11,8 +11,6 @@
 
 Zest provides a simplified and opinionated PHP oriented entry point to the Vite development environment.
 
-_Get news and updates on the [DecodeLabs blog](https://blog.decodelabs.com)._
-
 ---
 
 ## Installation
