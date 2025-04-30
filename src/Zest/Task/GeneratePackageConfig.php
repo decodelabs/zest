@@ -11,7 +11,7 @@ namespace DecodeLabs\Zest\Task;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Clip\Task\GenerateFileTrait;
-use DecodeLabs\Overpass;
+use DecodeLabs\Overpass\Project;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Zest;
 use DecodeLabs\Zest\Task\GeneratePackageConfig\PackageTemplate;
@@ -22,7 +22,7 @@ class GeneratePackageConfig implements Task
 
     protected function getTargetFile(): File
     {
-        return Overpass::$rootDir->getFile('package.json');
+        return new Project()->packageFile;
     }
 
     protected function getTemplate(): PackageTemplate

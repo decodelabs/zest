@@ -22,7 +22,7 @@ class GenerateBuildManifest implements Task
 
     public function execute(): bool
     {
-        Zest::checkPackage();
+        Zest::checkProject();
 
         $configName = $this->getConfigFileName();
         $config = Zest::loadConfig($configName);

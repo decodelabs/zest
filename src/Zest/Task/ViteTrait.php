@@ -77,7 +77,7 @@ trait ViteTrait
     protected function getManifestFile(
         Config $config
     ): File {
-        $dir = Zest::$package->rootDir->getDir(
+        $dir = Zest::$project->rootDir->getDir(
             $config->outDir
         );
 
