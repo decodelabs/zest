@@ -29,8 +29,12 @@
         "ext-pcntl": "*",
 
         "decodelabs/phpstan-decodelabs": "^0.7",
-        "decodelabs/harvest": "^0.4.2",
+        "decodelabs/harvest": "^0.5",
         "decodelabs/horizon": "^0.4"
+    },
+    "conflict": {
+        "decodelabs/harvest": "<0.5",
+        "decodelabs/horizon": "<0.4"
     },
     "autoload": {
         "psr-4": {
