@@ -10,20 +10,28 @@ declare(strict_types=1);
 namespace DecodeLabs\Harvest\Middleware;
 
 use DecodeLabs\Coercion;
-use DecodeLabs\Genesis;
 use DecodeLabs\Harvest;
+use DecodeLabs\Harvest\Middleware as HarvestMiddleware;
+use DecodeLabs\Harvest\MiddlewareGroup;
 use DecodeLabs\Iota;
 use DecodeLabs\Monarch;
 use DecodeLabs\Typify;
 use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Config\Generic as GenericConfig;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Server\MiddlewareInterface as Middleware;
-use Psr\Http\Server\RequestHandlerInterface as Handler;
+use Psr\Http\Message\ResponseInterface as PsrResponse;
+use Psr\Http\Message\ServerRequestInterface as PsrRequest;
+use Psr\Http\Server\RequestHandlerInterface as PsrHandler;
 
-class Zest implements Middleware
+class Zest implements HarvestMiddleware
 {
+    public MiddlewareGroup $group {
+        get => MiddlewareGroup::Generator;
+    }
+
+    public int $priority {
+        get => -10;
+    }
+
     /**
      * @var array<string,Config>
      */
@@ -93,9 +101,9 @@ class Zest implements Middleware
      * Process middleware
      */
     public function process(
-        Request $request,
-        Handler $next
-    ): Response {
+        PsrRequest $request,
+        PsrHandler $next
+    ): PsrResponse {
         if ($response = $this->handleAsset($request)) {
             return $response;
         }
@@ -108,8 +116,8 @@ class Zest implements Middleware
      * Serve vite asset
      */
     protected function handleAsset(
-        Request $request
-    ): ?Response {
+        PsrRequest $request
+    ): ?PsrResponse {
         $path = urldecode($request->getUri()->getPath());
 
         if (

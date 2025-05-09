@@ -1,3 +1,7 @@
+## v0.7.1 (2025-05-09)
+* Upgraded Harvest to v0.5.0
+* Implemented Middleware priority
+
 ## v0.7.0 (2025-04-30)
 * Upgraded Overpass to v0.3.0
 * Renamed Overpass property to $project
