@@ -6,17 +6,23 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Zest\Task;
+namespace DecodeLabs\Zest\Action;
 
 use DecodeLabs\Atlas\File;
-use DecodeLabs\Clip\Task;
-use DecodeLabs\Clip\Task\GenerateFileTrait;
+use DecodeLabs\Commandment\Action;
+use DecodeLabs\Commandment\Argument;
+use DecodeLabs\Commandment\Request;
+use DecodeLabs\Clip\Action\GenerateFileTrait;
 use DecodeLabs\Overpass\Project;
-use DecodeLabs\Terminus as Cli;
+use DecodeLabs\Terminus\Session;
 use DecodeLabs\Zest;
-use DecodeLabs\Zest\Task\GeneratePackageConfig\PackageTemplate;
+use DecodeLabs\Zest\Action\GeneratePackageConfig\PackageTemplate;
 
-class GeneratePackageConfig implements Task
+#[Argument\Flag(
+    name: 'no-install',
+    description: 'Don\'t install dependencies',
+)]
+class GeneratePackageConfig implements Action
 {
     use GenerateFileTrait;
 
@@ -35,11 +41,7 @@ class GeneratePackageConfig implements Task
     protected function afterFileSave(
         File $file
     ): bool {
-        Cli::$command
-            ->addArgument('-no-install', 'Don\'t install dependencies');
-
-
-        if (!Cli::$command['no-install']) {
+        if (!$this->request->parameters->getAsBool('no-install')) {
             return Zest::run('install-dependencies');
         }
 

@@ -7,27 +7,37 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Zest\Task;
+namespace DecodeLabs\Zest\Action;
 
 use DecodeLabs\Atlas\File;
-use DecodeLabs\Coercion;
-use DecodeLabs\Terminus as Cli;
+use DecodeLabs\Commandment\Argument;
+use DecodeLabs\Commandment\Request;
+use DecodeLabs\Terminus\Session;
 use DecodeLabs\Zest;
 use DecodeLabs\Zest\Config;
 
 trait ViteTrait
 {
-    protected function getConfigFileName(): ?string
-    {
-        Cli::$command
-            ->addArgument('?confName', 'Config name')
-            ->addArgument('-config=vite', 'Config name');
+    #[Argument\Value(
+        name: 'confName',
+        description: 'Config name',
+    )]
+    #[Argument\Option(
+        name: 'config',
+        description: 'Config name',
+        default: 'vite',
+    )]
+    public function __construct(
+        protected Session $io
+    ) {
+    }
 
-        $output = Coercion::asString(
-            Cli::$command['confName'] ??
-                Cli::$command['config'] ??
-                'vite'
-        );
+    protected function getConfigFileName(
+        Request $request
+    ): ?string {
+        $output = $request->parameters->getAsString('confName') ??
+            $request->parameters->getAsString('config') ??
+            'vite';
 
         if (
             $output === 'vite' ||
@@ -58,6 +68,7 @@ trait ViteTrait
      * @return array<string>
      */
     protected function getBuildArguments(
+        Request $request,
         ?string $configName,
         bool $passthrough = false
     ): array {
@@ -67,7 +78,7 @@ trait ViteTrait
             $args[] = $this->getConfigArgument($configName, $passthrough);
         }
 
-        if (Cli::$command['emptyOutDir']) {
+        if ($request->parameters->getAsBool('emptyOutDir')) {
             $args[] = '--emptyOutDir';
         }
 

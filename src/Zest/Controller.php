@@ -11,13 +11,13 @@ namespace DecodeLabs\Zest;
 
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Clip\Controller as ControllerInterface;
-use DecodeLabs\Clip\Controller\Generic as GenericController;
+use DecodeLabs\Clip\Controller\Commandment as CommandmentController;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Overpass\Project;
 use DecodeLabs\Veneer\Plugin;
 use DecodeLabs\Zest\Config\Vite as ViteConfig;
 
-class Controller extends GenericController implements ControllerInterface
+class Controller extends CommandmentController implements ControllerInterface
 {
     #[Plugin]
     public Project $project;
@@ -25,14 +25,10 @@ class Controller extends GenericController implements ControllerInterface
     public function __construct(
         ?Dir $dir = null
     ) {
+        parent::__construct();
         $this->project = new Project($dir);
     }
 
-
-
-    /**
-     * Check in project
-     */
     public function checkProject(): void
     {
         if (!$this->project->isInitialised()) {
@@ -42,10 +38,6 @@ class Controller extends GenericController implements ControllerInterface
         }
     }
 
-
-    /**
-     * Get controller
-     */
     public function getController(): Controller
     {
         return $this;

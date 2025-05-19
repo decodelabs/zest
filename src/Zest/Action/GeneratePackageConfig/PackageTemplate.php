@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Zest\Task\GeneratePackageConfig;
+namespace DecodeLabs\Zest\Action\GeneratePackageConfig;
 
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Zest\Template;

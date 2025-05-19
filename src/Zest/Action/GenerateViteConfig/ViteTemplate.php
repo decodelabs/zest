@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Zest\Task\GenerateViteConfig;
+namespace DecodeLabs\Zest\Action\GenerateViteConfig;
 
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Zest\Config;

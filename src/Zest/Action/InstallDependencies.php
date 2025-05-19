@@ -7,23 +7,25 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Zest\Task;
+namespace DecodeLabs\Zest\Action;
 
-use DecodeLabs\Clip\Task;
+use DecodeLabs\Commandment\Action;
+use DecodeLabs\Commandment\Request;
 use DecodeLabs\Overpass\Project;
 
-class InstallDependencies implements Task
+class InstallDependencies implements Action
 {
     /**
      * @var array<string,string>
      */
     protected const array DevPackages = [
         'vite' => '^6',
-        '@decodelabs/vite-plugin-zest' => '^0.1.1',
+        '@decodelabs/vite-plugin-zest' => '^0.3',
     ];
 
-    public function execute(): bool
-    {
+    public function execute(
+        Request $request
+    ): bool {
         $project = new Project();
         $packages = $devPackages = [];
 

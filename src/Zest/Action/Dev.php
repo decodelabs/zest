@@ -9,22 +9,22 @@ declare(strict_types=1);
 
 declare(ticks=1);
 
-namespace DecodeLabs\Zest\Task;
+namespace DecodeLabs\Zest\Action;
 
-use DecodeLabs\Clip\Task;
-use DecodeLabs\Terminus as Cli;
+use DecodeLabs\Commandment\Action;
+use DecodeLabs\Commandment\Request;
 use DecodeLabs\Zest;
-use DecodeLabs\Zest\Manifest;
 
-class Dev implements Task
+class Dev implements Action
 {
     use ViteTrait;
 
-    public function execute(): bool
-    {
+    public function execute(
+        Request $request
+    ): bool {
         Zest::checkProject();
 
-        $configName = $this->getConfigFileName();
+        $configName = $this->getConfigFileName($request);
 
         return Zest::$project->runPackage(
             'vite',
