@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Zest\Action\GeneratePackageConfig;
 
-use DecodeLabs\Terminus as Cli;
+use DecodeLabs\Zest;
 use DecodeLabs\Zest\Template;
 
 class PackageTemplate extends Template
@@ -19,9 +19,11 @@ class PackageTemplate extends Template
     protected function generateSlot(
         string $name
     ): ?string {
+        $io = Zest::getIoSession();
+
         switch ($name) {
             case 'pkgName':
-                return Cli::ask('What is your full package name?', function () {
+                return $io->ask('What is your full package name?', function () {
                     $name = $this->controller->project->rootDir->getName();
                     return $this->controller->project->rootDir->getParent()?->getName() . '-' . $name;
                 });
