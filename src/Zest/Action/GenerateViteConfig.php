@@ -44,7 +44,7 @@ class GenerateViteConfig implements Action
     {
         $fileName = 'vite.';
 
-        if($confName = $this->request->parameters->getAsString('confName')) {
+        if($confName = $this->request->parameters->tryString('confName')) {
             $fileName .= $confName.'.';
         }
 

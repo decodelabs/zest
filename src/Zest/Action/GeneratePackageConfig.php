@@ -41,7 +41,7 @@ class GeneratePackageConfig implements Action
     protected function afterFileSave(
         File $file
     ): bool {
-        if (!$this->request->parameters->getAsBool('no-install')) {
+        if (!$this->request->parameters->asBool('no-install')) {
             return Zest::run('install-dependencies');
         }
 

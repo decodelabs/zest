@@ -35,8 +35,8 @@ trait ViteTrait
     protected function getConfigFileName(
         Request $request
     ): ?string {
-        $output = $request->parameters->getAsString('confName') ??
-            $request->parameters->getAsString('config') ??
+        $output = $request->parameters->tryString('confName') ??
+            $request->parameters->tryString('config') ??
             'vite';
 
         if (
@@ -78,7 +78,7 @@ trait ViteTrait
             $args[] = $this->getConfigArgument($configName, $passthrough);
         }
 
-        if ($request->parameters->getAsBool('emptyOutDir')) {
+        if ($request->parameters->asBool('emptyOutDir')) {
             $args[] = '--emptyOutDir';
         }
 
