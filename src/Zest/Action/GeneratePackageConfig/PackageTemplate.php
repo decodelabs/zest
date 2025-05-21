@@ -24,8 +24,8 @@ class PackageTemplate extends Template
         switch ($name) {
             case 'pkgName':
                 return $io->ask('What is your full package name?', function () {
-                    $name = $this->controller->project->rootDir->getName();
-                    return $this->controller->project->rootDir->getParent()?->getName() . '-' . $name;
+                    $name = $this->controller->project->rootDir->name;
+                    return $this->controller->project->rootDir->getParent()?->name . '-' . $name;
                 });
         }
 

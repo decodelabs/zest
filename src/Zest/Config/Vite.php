@@ -24,7 +24,7 @@ class Vite implements Config
     public const array Extensions = ['ts', 'mjs', 'cjs', 'js'];
 
     public string $path {
-        get => $this->controller->project->rootDir->getPath();
+        get => $this->controller->project->rootDir->path;
     }
 
     protected(set) ?string $host = null;
@@ -138,7 +138,7 @@ class Vite implements Config
         $filename = preg_replace(
             '/\.('.implode('|', self::Extensions).')$/',
             '.php',
-            basename($this->file->getPath())
+            $this->file->name
         );
 
         if(
@@ -182,7 +182,7 @@ class Vite implements Config
 
     private function getDefaultExtension(): string
     {
-        if(str_ends_with(basename($this->file->getPath()), '.ts')) {
+        if(str_ends_with(basename($this->file->path), '.ts')) {
             return 'ts';
         } else {
             return 'js';

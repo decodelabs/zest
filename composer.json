@@ -22,7 +22,7 @@
         "decodelabs/lucid": "^0.5",
         "decodelabs/monarch": "^0.1.1",
         "decodelabs/overpass": "^0.3",
-        "decodelabs/terminus": "^0.12",
+        "decodelabs/terminus": "^0.13",
         "decodelabs/typify": "^0.3.2",
         "decodelabs/veneer": "^0.12.3"
     },
