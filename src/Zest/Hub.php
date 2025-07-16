@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Zest
  * @license http://opensource.org/licenses/MIT
@@ -26,7 +27,7 @@ class Hub extends ClipHub
         // @phpstan-ignore-next-line
         Archetype::map(ActionInterface::class, Action::class);
 
-        if(Monarch::$container instanceof Container) {
+        if (Monarch::$container instanceof Container) {
             $controller = new Controller();
             Monarch::$container->bindShared(ControllerInterface::class, $controller);
             Monarch::$container->bindShared(Controller::class, $controller);

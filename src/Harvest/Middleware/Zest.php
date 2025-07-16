@@ -46,16 +46,16 @@ class Zest implements HarvestMiddleware
         if ($configs === null) {
             $iota = Iota::loadStatic('zest');
 
-            if(
+            if (
                 $iota->has('__manifest') &&
                 !$iota->mutable
             ) {
                 // Fetch manifest if in production
                 /** @var array<string> */
                 $list = Coercion::asArray($iota->return('__manifest'));
-            } elseif($iota->mutable) {
+            } elseif ($iota->mutable) {
                 // Scan for configs
-                $list = $iota->scan(function($file) {
+                $list = $iota->scan(function ($file) {
                     return $file !== '__manifest';
                 });
 
@@ -67,14 +67,14 @@ class Zest implements HarvestMiddleware
                     return $export;
                     PHP;
 
-                if($code !== $iota->fetch('__manifest')) {
+                if ($code !== $iota->fetch('__manifest')) {
                     $iota->store('__manifest', $code);
                 }
             }
 
             $configs = [];
 
-            foreach($list ?? [] as $name) {
+            foreach ($list ?? [] as $name) {
                 $configs[$name] = $iota->returnAsType(
                     key: $name,
                     type: Config::class
@@ -82,11 +82,11 @@ class Zest implements HarvestMiddleware
             }
         } else {
             // Resolve config names
-            foreach($configs as $key => $config) {
-                if(is_string($config)) {
+            foreach ($configs as $key => $config) {
+                if (is_string($config)) {
                     $filename = $config === 'default' ?
                         'vite.config.php' :
-                        'vite.'.$config.'.config.php';
+                        'vite.' . $config . '.config.php';
 
                     $configs[$key] = Iota::loadStatic('zest')->return($filename);
                 }
@@ -139,7 +139,7 @@ class Zest implements HarvestMiddleware
         ];
 
         // If not merged to public, also check outDir
-        if(!str_starts_with($config->outDir, $config->publicDir)) {
+        if (!str_starts_with($config->outDir, $config->publicDir)) {
             $paths[] = $root . '/' . $config->outDir . '/' . $path;
         }
 
@@ -178,10 +178,10 @@ class Zest implements HarvestMiddleware
     ): ?Config {
         foreach ($this->configs as $config) {
             // OutDir in public - map paths
-            if(str_starts_with($config->outDir, $config->publicDir)) {
+            if (str_starts_with($config->outDir, $config->publicDir)) {
                 $check = substr($config->outDir, strlen($config->publicDir));
 
-                if(str_starts_with($path, $check)) {
+                if (str_starts_with($path, $check)) {
                     $path = ltrim($path, '/');
                     return $config;
                 }

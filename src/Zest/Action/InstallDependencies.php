@@ -30,7 +30,7 @@ class InstallDependencies implements Action
         $packages = $devPackages = [];
 
         foreach (static::DevPackages as $name => $version) {
-            $devPackages[$name] = $name.'@'.$version;
+            $devPackages[$name] = $name . '@' . $version;
         }
 
         //$project->install(...array_values($packages));

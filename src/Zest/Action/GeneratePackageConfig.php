@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package Zest
  * @license http://opensource.org/licenses/MIT
@@ -9,12 +10,10 @@ declare(strict_types=1);
 namespace DecodeLabs\Zest\Action;
 
 use DecodeLabs\Atlas\File;
+use DecodeLabs\Clip\Action\GenerateFileTrait;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Argument;
-use DecodeLabs\Commandment\Request;
-use DecodeLabs\Clip\Action\GenerateFileTrait;
 use DecodeLabs\Overpass\Project;
-use DecodeLabs\Terminus\Session;
 use DecodeLabs\Zest;
 use DecodeLabs\Zest\Action\GeneratePackageConfig\PackageTemplate;
 

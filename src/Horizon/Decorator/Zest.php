@@ -10,10 +10,9 @@ declare(strict_types=1);
 namespace DecodeLabs\Horizon\Decorator;
 
 use DecodeLabs\Coercion;
-use DecodeLabs\Genesis;
-use DecodeLabs\Iota;
 use DecodeLabs\Horizon\Decorator;
 use DecodeLabs\Horizon\Page;
+use DecodeLabs\Iota;
 use DecodeLabs\Monarch;
 use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Manifest;
@@ -27,29 +26,29 @@ class Zest implements Decorator
         $manifest = $this->loadManifest($manifest);
 
 
-        foreach($manifest->getCssData() as $file => $attributes) {
+        foreach ($manifest->getCssData() as $file => $attributes) {
             /** @var array<string,string|bool|int|float> $attributes */
             $page->addLink(
-                key: 'zest:'.$file,
+                key: 'zest:' . $file,
                 rel: 'stylesheet',
                 href: $this->normalizeUrl($file),
                 attributes: $attributes
             );
         }
 
-        foreach($manifest->getHeadJsData() as $file => $attributes) {
+        foreach ($manifest->getHeadJsData() as $file => $attributes) {
             /** @var array<string,string|bool|int|float> $attributes */
             $page->addScript(
-                key: 'zest:'.$file,
+                key: 'zest:' . $file,
                 src: $this->normalizeUrl($file),
                 attributes: $attributes
             );
         }
 
-        foreach($manifest->getBodyJsData() as $file => $attributes) {
+        foreach ($manifest->getBodyJsData() as $file => $attributes) {
             /** @var array<string,string|bool|int|float> $attributes */
             $page->addBodyScript(
-                key: 'zest:'.$file,
+                key: 'zest:' . $file,
                 src: $this->normalizeUrl($file),
                 attributes: $attributes
             );
@@ -59,11 +58,11 @@ class Zest implements Decorator
     private function loadManifest(
         string|Manifest|null $manifest = null
     ): Manifest {
-        if($manifest instanceof Manifest) {
+        if ($manifest instanceof Manifest) {
             return $manifest;
         }
 
-        if(
+        if (
             $manifest === null ||
             !str_contains($manifest, '/')
         ) {
@@ -80,7 +79,7 @@ class Zest implements Decorator
     ): string {
         $iota = Iota::loadStatic('zest');
 
-        if(!$iota->has('__manifest')) {
+        if (!$iota->has('__manifest')) {
             return $this->getDefaultManifestPath();
         }
 
@@ -88,13 +87,13 @@ class Zest implements Decorator
         /** @var array<string> */
         $list = Coercion::asArray($iota->return('__manifest'));
 
-        if($manifest === null) {
+        if ($manifest === null) {
             $test = 'vite.config.php';
         } else {
-            $test = 'vite.'.$manifest.'.config.php';
+            $test = 'vite.' . $manifest . '.config.php';
         }
 
-        if(!in_array($test, $list)) {
+        if (!in_array($test, $list)) {
             return $this->getDefaultManifestPath();
         }
 
@@ -103,7 +102,7 @@ class Zest implements Decorator
             type: Config::class
         );
 
-        return $config->path.'/'.$config->outDir.'/.vite/manifest.json';
+        return $config->path . '/' . $config->outDir . '/.vite/manifest.json';
     }
 
     private function getDefaultManifestPath(): string
@@ -114,7 +113,7 @@ class Zest implements Decorator
     private function normalizeUrl(
         string $url
     ): string {
-        if(
+        if (
             str_starts_with($url, 'http://') ||
             str_starts_with($url, 'https://') ||
             str_starts_with($url, '//')
@@ -122,11 +121,10 @@ class Zest implements Decorator
             return $url;
         }
 
-        if(!str_starts_with($url, '/')) {
-            $url = '/'.$url;
+        if (!str_starts_with($url, '/')) {
+            $url = '/' . $url;
         }
 
         return $url;
     }
 }
-

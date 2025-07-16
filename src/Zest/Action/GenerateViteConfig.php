@@ -10,12 +10,10 @@ declare(strict_types=1);
 namespace DecodeLabs\Zest\Action;
 
 use DecodeLabs\Atlas\File;
+use DecodeLabs\Clip\Action\GenerateFileTrait;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Argument;
-use DecodeLabs\Commandment\Request;
-use DecodeLabs\Clip\Action\GenerateFileTrait;
 use DecodeLabs\Overpass\Project;
-use DecodeLabs\Terminus\Session;
 use DecodeLabs\Zest;
 use DecodeLabs\Zest\Action\GenerateViteConfig\ViteTemplate;
 use DecodeLabs\Zest\Config\Vite as Config;
@@ -30,7 +28,7 @@ class GenerateViteConfig implements Action
 
     protected Config $config {
         get {
-            if(isset($this->config)) {
+            if (isset($this->config)) {
                 return $this->config;
             }
 
@@ -44,8 +42,8 @@ class GenerateViteConfig implements Action
     {
         $fileName = 'vite.';
 
-        if($confName = $this->request->parameters->tryString('confName')) {
-            $fileName .= $confName.'.';
+        if ($confName = $this->request->parameters->tryString('confName')) {
+            $fileName .= $confName . '.';
         }
 
         $fileName .= 'config.ts';

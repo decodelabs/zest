@@ -27,16 +27,16 @@ class Vite implements Config
         get => $this->controller->project->rootDir->path;
     }
 
-    protected(set) ?string $host = null;
-    protected(set) ?int $port = null;
-    protected(set) ?bool $https = false;
-    protected(set) string $outDir = 'dist';
-    protected(set) string $assetsDir = 'assets';
-    protected(set) string $publicDir = 'public';
-    protected(set) array $aliases = [];
-    protected(set) ?string $urlPrefix = null;
-    protected(set) ?string $entry = null;
-    protected(set) string $manifestName = 'manifest.json';
+    public protected(set) ?string $host = null;
+    public protected(set) ?int $port = null;
+    public protected(set) ?bool $https = false;
+    public protected(set) string $outDir = 'dist';
+    public protected(set) string $assetsDir = 'assets';
+    public protected(set) string $publicDir = 'public';
+    public protected(set) array $aliases = [];
+    public protected(set) ?string $urlPrefix = null;
+    public protected(set) ?string $entry = null;
+    public protected(set) string $manifestName = 'manifest.json';
 
     protected File $file;
     protected Controller $controller;
@@ -55,10 +55,10 @@ class Vite implements Config
 
         $name .= 'config';
 
-        foreach(self::Extensions as $ext) {
-            $this->file = $controller->project->rootDir->getFile($name.'.'.$ext);
+        foreach (self::Extensions as $ext) {
+            $this->file = $controller->project->rootDir->getFile($name . '.' . $ext);
 
-            if($this->file->exists()) {
+            if ($this->file->exists()) {
                 break;
             }
         }
@@ -120,7 +120,7 @@ class Vite implements Config
         // @phpstan-ignore-next-line
         $this->aliases = $tree->resolve->alias->as('string[]');
         $this->urlPrefix = $tree->base->as('?string') ?? '/';
-        $this->entry = $tree->build->rollupOptions->input->as('?string') ?? 'src/main.'.$this->getDefaultExtension();
+        $this->entry = $tree->build->rollupOptions->input->as('?string') ?? 'src/main.' . $this->getDefaultExtension();
 
         $manifest = $tree->build['manifest'] ?? true;
 
@@ -136,12 +136,12 @@ class Vite implements Config
         $iota = Iota::loadStatic('zest');
 
         $filename = preg_replace(
-            '/\.('.implode('|', self::Extensions).')$/',
+            '/\.(' . implode('|', self::Extensions) . ')$/',
             '.php',
             $this->file->name
         );
 
-        if(
+        if (
             !$filename ||
             !$iota->has((string)$filename)
         ) {
@@ -160,7 +160,7 @@ class Vite implements Config
         $this->publicDir = $config->publicDir;
         $this->aliases = $config->aliases;
         $this->urlPrefix = $config->urlPrefix;
-        $this->entry = $config->entry ?? 'src/main.'.$this->getDefaultExtension();
+        $this->entry = $config->entry ?? 'src/main.' . $this->getDefaultExtension();
         $this->manifestName = $config->manifestName;
 
         return true;
@@ -175,14 +175,14 @@ class Vite implements Config
         $this->assetsDir = 'assets';
         $this->publicDir = 'public';
         $this->urlPrefix = null;
-        $this->entry = 'src/main.'.$this->getDefaultExtension();
+        $this->entry = 'src/main.' . $this->getDefaultExtension();
         $this->manifestName = 'manifest.json';
     }
 
 
     private function getDefaultExtension(): string
     {
-        if(str_ends_with(basename($this->file->path), '.ts')) {
+        if (str_ends_with(basename($this->file->path), '.ts')) {
             return 'ts';
         } else {
             return 'js';
