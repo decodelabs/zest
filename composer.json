@@ -30,7 +30,7 @@
         "ext-pcntl": "*",
 
         "decodelabs/phpstan-decodelabs": "^0.7",
-        "decodelabs/harvest": "^0.5.4",
+        "decodelabs/harvest": "^0.6",
         "decodelabs/horizon": "^0.4.8"
     },
     "conflict": {
