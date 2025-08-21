@@ -13,7 +13,6 @@ namespace DecodeLabs\Zest\Action;
 
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Request;
-use DecodeLabs\Zest;
 
 class Dev implements Action
 {
@@ -22,11 +21,11 @@ class Dev implements Action
     public function execute(
         Request $request
     ): bool {
-        Zest::checkProject();
+        $this->zest->checkProject();
 
         $configName = $this->getConfigFileName($request);
 
-        return Zest::$project->runPackage(
+        return $this->zest->project->runPackage(
             'vite',
             $this->getConfigArgument($configName)
         );

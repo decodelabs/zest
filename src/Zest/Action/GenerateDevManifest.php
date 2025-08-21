@@ -13,7 +13,6 @@ namespace DecodeLabs\Zest\Action;
 
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Request;
-use DecodeLabs\Zest;
 use DecodeLabs\Zest\Manifest;
 
 class GenerateDevManifest implements Action
@@ -23,10 +22,10 @@ class GenerateDevManifest implements Action
     public function execute(
         Request $request
     ): bool {
-        Zest::checkProject();
+        $this->zest->checkProject();
 
         $configName = $this->getConfigFileName($request);
-        $config = Zest::loadConfig($configName);
+        $config = $this->zest->loadConfig($configName);
 
         $this->io->info('Generating dev Zest manifest');
 

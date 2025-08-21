@@ -29,7 +29,7 @@ class Generic implements Config
         protected(set) ?string $entry = null,
         protected(set) string $manifestName = 'manifest.json',
     ) {
-        $path = Monarch::$paths->run;
+        $path = Monarch::getPaths()->run;
 
         foreach ($aliases as $alias => $aliasPath) {
             if (str_starts_with($aliasPath, '.')) {

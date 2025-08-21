@@ -44,10 +44,10 @@ class Manifest
         string|File $file
     ): static {
         if (!$file instanceof File) {
-            $file = Atlas::file($file);
+            $file = Atlas::getFile($file);
         }
 
-        $genFile = Atlas::file((string)$file . '.php');
+        $genFile = Atlas::getFile((string)$file . '.php');
 
         if (!$genFile->exists()) {
             return new static($file);
@@ -64,11 +64,11 @@ class Manifest
         bool $hot = false
     ) {
         if (!$file instanceof File) {
-            $file = Atlas::file($file);
+            $file = Atlas::getFile($file);
         }
 
         $this->file = $file;
-        $this->genFile = Atlas::file((string)$file . '.php');
+        $this->genFile = Atlas::getFile((string)$file . '.php');
         $this->hot = $hot;
     }
 
@@ -261,7 +261,7 @@ class Manifest
         Config $config
     ): static {
         if (!$file instanceof File) {
-            $file = Atlas::file($file);
+            $file = Atlas::getFile($file);
         }
 
         $output = (new static($file));
@@ -335,7 +335,7 @@ class Manifest
         Config $config
     ): static {
         if (!$file instanceof File) {
-            $file = Atlas::file($file);
+            $file = Atlas::getFile($file);
         }
 
         $url = $config->https ? 'https' : 'http';

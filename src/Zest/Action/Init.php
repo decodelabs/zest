@@ -17,25 +17,26 @@ use DecodeLabs\Zest;
 class Init implements Action
 {
     public function __construct(
-        protected Session $io
+        protected Session $io,
+        protected Zest $zest
     ) {
     }
 
     public function execute(
         Request $request
     ): bool {
-        if (!Zest::run('generate-package-config', '--no-install')) {
+        if (!$this->zest->run('generate-package-config', '--no-install')) {
             return false;
         }
 
-        if (!Zest::run('install-dependencies')) {
+        if (!$this->zest->run('install-dependencies')) {
             return false;
         }
 
-        if (!Zest::run('generate-vite-config')) {
+        if (!$this->zest->run('generate-vite-config')) {
             return false;
         }
 
-        return Zest::run('dev');
+        return $this->zest->run('dev');
     }
 }

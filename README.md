@@ -85,7 +85,7 @@ class ViewPlugin {
 
     public function apply(View $view): void {
         $manifest = Manifest::load(
-            Monarch::$paths->root . '/my-theme/manifest.json'
+            Monarch::getPaths()->root . '/my-theme/manifest.json'
         );
 
         foreach ($manifest->getCssData() as $file => $attr) {

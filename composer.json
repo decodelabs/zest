@@ -11,31 +11,31 @@
     "require": {
         "php": "^8.4",
 
-        "decodelabs/archetype": "^0.3.10",
-        "decodelabs/clip": "^0.5.5",
-        "decodelabs/coercion": "^0.3.3",
-        "decodelabs/collections": "^0.11.3",
-        "decodelabs/commandment": "^0.2.2",
-        "decodelabs/exceptional": "^0.6.1",
-        "decodelabs/genesis": "^0.12.4",
-        "decodelabs/iota": "^0.2.4",
-        "decodelabs/lucid": "^0.5.2",
-        "decodelabs/monarch": "^0.1.4",
-        "decodelabs/overpass": "^0.3.3",
-        "decodelabs/terminus": "^0.13.1",
-        "decodelabs/typify": "^0.3.6",
-        "decodelabs/veneer": "^0.12.8"
+        "decodelabs/archetype": "^0.4",
+        "decodelabs/clip": "^0.6",
+        "decodelabs/coercion": "^0.3.5",
+        "decodelabs/collections": "^0.12",
+        "decodelabs/commandment": "^0.3",
+        "decodelabs/exceptional": "^0.6.3",
+        "decodelabs/genesis": "^0.13",
+        "decodelabs/hatch": "^0.1.4",
+        "decodelabs/iota": "^0.3",
+        "decodelabs/lucid": "^0.6",
+        "decodelabs/monarch": "^0.2.1",
+        "decodelabs/overpass": "^0.4",
+        "decodelabs/terminus": "^0.14",
+        "decodelabs/typify": "^0.4"
     },
     "require-dev": {
         "ext-pcntl": "*",
 
         "decodelabs/phpstan-decodelabs": "^0.7",
-        "decodelabs/harvest": "^0.6",
-        "decodelabs/horizon": "^0.4.8"
+        "decodelabs/harvest": "^0.7",
+        "decodelabs/horizon": "^0.5"
     },
     "conflict": {
-        "decodelabs/harvest": "<0.5",
-        "decodelabs/horizon": "<0.4"
+        "decodelabs/harvest": "<0.7",
+        "decodelabs/horizon": "<0.5"
     },
     "autoload": {
         "psr-4": {
@@ -43,7 +43,10 @@
             "DecodeLabs\\Genesis\\": "src/Genesis/",
             "DecodeLabs\\Harvest\\": "src/Harvest/",
             "DecodeLabs\\Horizon\\": "src/Horizon/"
-        }
+        },
+        "classmap": [
+            "src/Zest.php"
+        ]
     },
     "bin": [
         "bin/zest"

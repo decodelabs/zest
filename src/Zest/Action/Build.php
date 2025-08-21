@@ -12,7 +12,6 @@ namespace DecodeLabs\Zest\Action;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Argument;
 use DecodeLabs\Commandment\Request;
-use DecodeLabs\Zest;
 
 #[Argument\Flag(
     name: 'emptyOutDir',
@@ -25,14 +24,14 @@ class Build implements Action
     public function execute(
         Request $request
     ): bool {
-        Zest::checkProject();
+        $this->zest->checkProject();
 
         $this->io->info('Building assets');
         $this->io->newLine();
 
         $configName = $this->getConfigFileName($request);
 
-        return Zest::$project->runPackage(
+        return $this->zest->project->runPackage(
             'vite',
             'build',
             ...$this->getBuildArguments($request, $configName)

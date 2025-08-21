@@ -13,7 +13,8 @@ use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Action\GenerateFileTrait;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Argument;
-use DecodeLabs\Overpass\Project;
+use DecodeLabs\Commandment\Request;
+use DecodeLabs\Terminus\Session;
 use DecodeLabs\Zest;
 use DecodeLabs\Zest\Action\GeneratePackageConfig\PackageTemplate;
 
@@ -23,17 +24,28 @@ use DecodeLabs\Zest\Action\GeneratePackageConfig\PackageTemplate;
 )]
 class GeneratePackageConfig implements Action
 {
-    use GenerateFileTrait;
+    use GenerateFileTrait {
+        __construct as private __generateFileTraitConstruct;
+    }
+
+    public function __construct(
+        protected Session $io,
+        protected Request $request,
+        protected Zest $zest
+    ) {
+        $this->__generateFileTraitConstruct($io, $request);
+    }
 
     protected function getTargetFile(): File
     {
-        return new Project()->packageFile;
+        return $this->zest->project->packageFile;
     }
 
     protected function getTemplate(): PackageTemplate
     {
         return new PackageTemplate(
-            Zest::getController()
+            $this->zest,
+            $this->io
         );
     }
 
@@ -41,7 +53,7 @@ class GeneratePackageConfig implements Action
         File $file
     ): bool {
         if (!$this->request->parameters->asBool('no-install')) {
-            return Zest::run('install-dependencies');
+            return $this->zest->run('install-dependencies');
         }
 
         return true;

@@ -28,7 +28,8 @@ trait ViteTrait
         default: 'vite',
     )]
     public function __construct(
-        protected Session $io
+        protected Session $io,
+        protected Zest $zest
     ) {
     }
 
@@ -88,7 +89,7 @@ trait ViteTrait
     protected function getManifestFile(
         Config $config
     ): File {
-        $dir = Zest::$project->rootDir->getDir(
+        $dir = $this->zest->project->rootDir->getDir(
             $config->outDir
         );
 

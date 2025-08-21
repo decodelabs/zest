@@ -19,12 +19,16 @@ use DecodeLabs\Zest\Manifest;
 
 class Zest implements Decorator
 {
+    public function __construct(
+        protected Iota $iota
+    ) {
+    }
+
     public function decorate(
         Page $page,
         string|Manifest|null $manifest = null
     ): void {
         $manifest = $this->loadManifest($manifest);
-
 
         foreach ($manifest->getCssData() as $file => $attributes) {
             /** @var array<string,string|bool|int|float> $attributes */
@@ -68,7 +72,7 @@ class Zest implements Decorator
         ) {
             $manifest = $this->findManifest($manifest);
         } else {
-            $manifest = Monarch::$paths->resolve($manifest);
+            $manifest = Monarch::getPaths()->resolve($manifest);
         }
 
         return Manifest::load($manifest);
@@ -77,15 +81,15 @@ class Zest implements Decorator
     private function findManifest(
         ?string $manifest
     ): string {
-        $iota = Iota::loadStatic('zest');
+        $repo = $this->iota->loadStatic('zest');
 
-        if (!$iota->has('__manifest')) {
+        if (!$repo->has('__manifest')) {
             return $this->getDefaultManifestPath();
         }
 
 
         /** @var array<string> */
-        $list = Coercion::asArray($iota->return('__manifest'));
+        $list = Coercion::asArray($repo->return('__manifest'));
 
         if ($manifest === null) {
             $test = 'vite.config.php';
@@ -97,7 +101,7 @@ class Zest implements Decorator
             return $this->getDefaultManifestPath();
         }
 
-        $config = $iota->returnAsType(
+        $config = $repo->returnAsType(
             key: $test,
             type: Config::class
         );
@@ -107,7 +111,7 @@ class Zest implements Decorator
 
     private function getDefaultManifestPath(): string
     {
-        return Monarch::$paths->run . '/public/assets/zest/.vite/manifest.json';
+        return Monarch::getPaths()->run . '/public/assets/zest/.vite/manifest.json';
     }
 
     private function normalizeUrl(

@@ -11,10 +11,11 @@ namespace DecodeLabs\Zest\Action;
 
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Request;
-use DecodeLabs\Overpass\Project;
 
 class InstallDependencies implements Action
 {
+    use ViteTrait;
+
     /**
      * @var array<string,string>
      */
@@ -26,7 +27,6 @@ class InstallDependencies implements Action
     public function execute(
         Request $request
     ): bool {
-        $project = new Project();
         $packages = $devPackages = [];
 
         foreach (static::DevPackages as $name => $version) {
@@ -34,7 +34,7 @@ class InstallDependencies implements Action
         }
 
         //$project->install(...array_values($packages));
-        $project->installDev(...array_values($devPackages));
+        $this->zest->project->installDev(...array_values($devPackages));
 
         return true;
     }

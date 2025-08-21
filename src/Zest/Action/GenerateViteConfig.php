@@ -13,7 +13,8 @@ use DecodeLabs\Atlas\File;
 use DecodeLabs\Clip\Action\GenerateFileTrait;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Argument;
-use DecodeLabs\Overpass\Project;
+use DecodeLabs\Commandment\Request;
+use DecodeLabs\Terminus\Session;
 use DecodeLabs\Zest;
 use DecodeLabs\Zest\Action\GenerateViteConfig\ViteTemplate;
 use DecodeLabs\Zest\Config\Vite as Config;
@@ -24,7 +25,9 @@ use DecodeLabs\Zest\Config\Vite as Config;
 )]
 class GenerateViteConfig implements Action
 {
-    use GenerateFileTrait;
+    use GenerateFileTrait {
+        __construct as private __generateFileTraitConstruct;
+    }
 
     protected Config $config {
         get {
@@ -32,10 +35,18 @@ class GenerateViteConfig implements Action
                 return $this->config;
             }
 
-            $this->config = Zest::loadConfig();
+            $this->config = $this->zest->loadConfig();
             $this->config->loadDefaults();
             return $this->config;
         }
+    }
+
+    public function __construct(
+        protected Session $io,
+        protected Request $request,
+        protected Zest $zest
+    ) {
+        $this->__generateFileTraitConstruct($io, $request);
     }
 
     protected function getTargetFile(): File
@@ -47,14 +58,14 @@ class GenerateViteConfig implements Action
         }
 
         $fileName .= 'config.ts';
-        return new Project()->rootDir->getFile($fileName);
+        return $this->zest->project->rootDir->getFile($fileName);
     }
 
     protected function getTemplate(): ViteTemplate
     {
         return new ViteTemplate(
-            Zest::getController(),
-            $this->config
+            $this->config,
+            $this->io
         );
     }
 
@@ -66,7 +77,7 @@ class GenerateViteConfig implements Action
 
         // Ensure main.js exists
         if (null !== ($entry = $this->config->entry)) {
-            $file = Zest::$project->rootDir->getFile($entry);
+            $file = $this->zest->project->rootDir->getFile($entry);
 
             if (!$file->exists()) {
                 $file->putContents('console.log("hello world")');

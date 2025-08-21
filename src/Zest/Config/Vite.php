@@ -15,16 +15,16 @@ use DecodeLabs\Coercion;
 use DecodeLabs\Collections\Tree;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Iota;
+use DecodeLabs\Monarch;
 use DecodeLabs\Overpass\Project;
 use DecodeLabs\Zest\Config;
-use DecodeLabs\Zest\Controller;
 
 class Vite implements Config
 {
     public const array Extensions = ['ts', 'mjs', 'cjs', 'js'];
 
     public string $path {
-        get => $this->controller->project->rootDir->path;
+        get => $this->project->rootDir->path;
     }
 
     public protected(set) ?string $host = null;
@@ -39,14 +39,12 @@ class Vite implements Config
     public protected(set) string $manifestName = 'manifest.json';
 
     protected File $file;
-    protected Controller $controller;
 
     public function __construct(
-        Controller $controller,
+        protected Project $project,
+        protected Iota $iota,
         ?string $configName = null
     ) {
-        $this->controller = $controller;
-
         $name = 'vite.';
 
         if ($configName !== null) {
@@ -56,7 +54,7 @@ class Vite implements Config
         $name .= 'config';
 
         foreach (self::Extensions as $ext) {
-            $this->file = $controller->project->rootDir->getFile($name . '.' . $ext);
+            $this->file = $project->rootDir->getFile($name . '.' . $ext);
 
             if ($this->file->exists()) {
                 break;
@@ -88,7 +86,7 @@ class Vite implements Config
         }
 
         $loaderFile = $nodeModules->getFile('.decodelabs-zest/load-vite-config.cjs');
-        $srcLoaderFile = Atlas::file(__DIR__ . '/load-vite-config.cjs');
+        $srcLoaderFile = Atlas::getFile(__DIR__ . '/load-vite-config.cjs');
 
         if ($loaderFile->exists()) {
             $hash = $loaderFile->getHash('crc32');
@@ -104,7 +102,7 @@ class Vite implements Config
             );
         }
 
-        $json = new Project()->bridge($loaderFile, (string)$this->file);
+        $json = $this->project->bridge($loaderFile, (string)$this->file);
 
         // @phpstan-ignore-next-line
         $tree = new Tree(Coercion::asArray(
@@ -133,7 +131,8 @@ class Vite implements Config
 
     protected function loadPhpConfig(): bool
     {
-        $iota = Iota::loadStatic('zest');
+        $iota = Monarch::getService(Iota::class);
+        $repo = $iota->loadStatic('zest');
 
         $filename = preg_replace(
             '/\.(' . implode('|', self::Extensions) . ')$/',
@@ -143,14 +142,14 @@ class Vite implements Config
 
         if (
             !$filename ||
-            !$iota->has((string)$filename)
+            !$repo->has((string)$filename)
         ) {
             return false;
         }
 
 
 
-        $config = $iota->returnAsType($filename, Generic::class);
+        $config = $repo->returnAsType($filename, Generic::class);
 
         $this->host = $config->host ?? 'localhost';
         $this->port = $config->port;

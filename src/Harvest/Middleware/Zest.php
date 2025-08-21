@@ -10,12 +10,12 @@ declare(strict_types=1);
 namespace DecodeLabs\Harvest\Middleware;
 
 use DecodeLabs\Coercion;
-use DecodeLabs\Harvest;
 use DecodeLabs\Harvest\Middleware as HarvestMiddleware;
 use DecodeLabs\Harvest\MiddlewareGroup;
+use DecodeLabs\Harvest\Response\Stream as StreamResponse;
 use DecodeLabs\Iota;
 use DecodeLabs\Monarch;
-use DecodeLabs\Typify;
+use DecodeLabs\Typify\Detector as TypeDetector;
 use DecodeLabs\Zest\Config;
 use DecodeLabs\Zest\Config\Generic as GenericConfig;
 use Psr\Http\Message\ResponseInterface as PsrResponse;
@@ -41,21 +41,22 @@ class Zest implements HarvestMiddleware
      * @param ?array<string,string|Config> $configs
      */
     public function __construct(
-        ?array $configs = null
+        Iota $iota,
+        ?array $configs = null,
     ) {
-        if ($configs === null) {
-            $iota = Iota::loadStatic('zest');
+        $repo = $iota->loadStatic('zest');
 
+        if ($configs === null) {
             if (
-                $iota->has('__manifest') &&
-                !$iota->mutable
+                $repo->has('__manifest') &&
+                !$repo->mutable
             ) {
                 // Fetch manifest if in production
                 /** @var array<string> */
-                $list = Coercion::asArray($iota->return('__manifest'));
-            } elseif ($iota->mutable) {
+                $list = Coercion::asArray($repo->return('__manifest'));
+            } elseif ($repo->mutable) {
                 // Scan for configs
-                $list = $iota->scan(function ($file) {
+                $list = $repo->scan(function ($file) {
                     return $file !== '__manifest';
                 });
 
@@ -67,15 +68,15 @@ class Zest implements HarvestMiddleware
                     return $export;
                     PHP;
 
-                if ($code !== $iota->fetch('__manifest')) {
-                    $iota->store('__manifest', $code);
+                if ($code !== $repo->fetch('__manifest')) {
+                    $repo->store('__manifest', $code);
                 }
             }
 
             $configs = [];
 
             foreach ($list ?? [] as $name) {
-                $configs[$name] = $iota->returnAsType(
+                $configs[$name] = $repo->returnAsType(
                     key: $name,
                     type: Config::class
                 );
@@ -88,7 +89,7 @@ class Zest implements HarvestMiddleware
                         'vite.config.php' :
                         'vite.' . $config . '.config.php';
 
-                    $configs[$key] = Iota::loadStatic('zest')->return($filename);
+                    $configs[$key] = $repo->return($filename);
                 }
             }
         }
@@ -97,9 +98,6 @@ class Zest implements HarvestMiddleware
         $this->configs = $configs;
     }
 
-    /**
-     * Process middleware
-     */
     public function process(
         PsrRequest $request,
         PsrHandler $next
@@ -111,10 +109,6 @@ class Zest implements HarvestMiddleware
         return $next->handle($request);
     }
 
-
-    /**
-     * Serve vite asset
-     */
     protected function handleAsset(
         PsrRequest $request
     ): ?PsrResponse {
@@ -143,12 +137,14 @@ class Zest implements HarvestMiddleware
             $paths[] = $root . '/' . $config->outDir . '/' . $path;
         }
 
+        $detector = new TypeDetector();
+
         foreach ($paths as $path) {
             if (is_file($path)) {
-                return Harvest::stream(
+                return new StreamResponse(
                     body: $path,
                     headers: [
-                        'Content-Type' => Typify::detect($path),
+                        'Content-Type' => $detector->detect($path),
                         'Cache-Control' => 'public, max-age=31536000'
                     ]
                 );
@@ -161,10 +157,10 @@ class Zest implements HarvestMiddleware
         $path = $root . '/' . $config->publicDir . '/' . $path;
 
         if (is_file($path)) {
-            return Harvest::stream(
+            return new StreamResponse(
                 body: $path,
                 headers: [
-                    'Content-Type' => Typify::detect($path),
+                    'Content-Type' => $detector->detect($path),
                     'Cache-Control' => 'public, max-age=31536000'
                 ]
             );
@@ -202,7 +198,7 @@ class Zest implements HarvestMiddleware
             return $config;
         }
 
-        $rootPath = Monarch::$paths->run;
+        $rootPath = Monarch::getPaths()->run;
 
         if (!is_dir($rootPath . '/public')) {
             return null;

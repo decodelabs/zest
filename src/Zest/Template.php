@@ -10,19 +10,15 @@ declare(strict_types=1);
 namespace DecodeLabs\Zest;
 
 use DecodeLabs\Atlas\File;
-use DecodeLabs\Genesis\FileTemplate;
+use DecodeLabs\Hatch\FileTemplate;
 
 class Template extends FileTemplate
 {
     protected const string File = 'file.template';
 
-    protected Controller $controller;
-
     public function __construct(
-        Controller $controller,
         string|File|null $file = null
     ) {
-        $this->controller = $controller;
         parent::__construct($file ?? static::File);
     }
 
@@ -76,9 +72,6 @@ class Template extends FileTemplate
     }
 
 
-    /**
-     * Export json data
-     */
     protected function exportJson(
         mixed $data,
         int $indent = 0

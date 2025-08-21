@@ -11,13 +11,14 @@ namespace DecodeLabs\Zest\Action;
 
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Request;
-use DecodeLabs\Overpass\Project;
 
 class Update implements Action
 {
+    use ViteTrait;
+
     public function execute(
         Request $request
     ): bool {
-        return new Project()->update();
+        return $this->zest->project->update();
     }
 }
