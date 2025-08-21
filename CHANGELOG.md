@@ -5,11 +5,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Unreleased
+--
+
+---
+
+### [v0.9.0](https://github.com/decodelabs/zest/commits/v0.9.0) - 21st August 2025
+
 - Added Kingdom Service support
 - Removed Veneer dependency
 - Simplified Container access in Hub
 - Switched to Hatch FileTemplate
 - Simplified dependency injection structure
+
+[Full list of changes](https://github.com/decodelabs/zest/compare/v0.8.7...v0.9.0)
 
 ---
 
