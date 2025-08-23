@@ -1,6 +1,8 @@
 parameters:
     bootstrapFiles:
-        - %currentWorkingDirectory%/tests/bootstrap.php
+        - %currentWorkingDirectory%/vendor/genesis-analyze.php
+
     paths:
         - src
+
     level: max

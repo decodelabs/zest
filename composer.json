@@ -17,7 +17,7 @@
         "decodelabs/collections": "^0.12",
         "decodelabs/commandment": "^0.3",
         "decodelabs/exceptional": "^0.6.3",
-        "decodelabs/genesis": "^0.13",
+        "decodelabs/genesis": "^0.14",
         "decodelabs/hatch": "^0.1.4",
         "decodelabs/iota": "^0.3",
         "decodelabs/lucid": "^0.6",
@@ -52,6 +52,9 @@
         "bin/zest"
     ],
     "extra": {
+        "genesis": {
+            "hub": "DecodeLabs\\Zest\\Hub"
+        },
         "branch-alias": {
             "dev-develop": "0.9.x-dev"
         }
@@ -60,7 +63,8 @@
     },
     "config": {
         "allow-plugins": {
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "decodelabs/genesis": true
         }
     }
 }
