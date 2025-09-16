@@ -61,6 +61,7 @@ class Zest implements HarvestMiddleware
                 });
 
                 $list = iterator_to_array($list);
+                sort($list);
                 $export = var_export($list, true);
 
                 $code = <<<PHP
