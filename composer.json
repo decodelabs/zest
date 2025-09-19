@@ -20,7 +20,7 @@
         "decodelabs/genesis": "^0.14",
         "decodelabs/hatch": "^0.1.4",
         "decodelabs/iota": "^0.3",
-        "decodelabs/lucid": "^0.7",
+        "decodelabs/lucid": "^0.8",
         "decodelabs/monarch": "^0.2.1",
         "decodelabs/overpass": "^0.4",
         "decodelabs/terminus": "^0.14",
