@@ -15,6 +15,8 @@ Zest provides a simplified and opinionated PHP oriented entry point to the Vite 
 
 ## Installation
 
+This package requires PHP 8.4 or higher.
+
 Install via Composer:
 
 ```bash
