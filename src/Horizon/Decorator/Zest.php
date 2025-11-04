@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @package Horizon
- * @license http://opensource.org/licenses/MIT
+ * Horizon
+ * @license https://opensource.org/licenses/MIT
  */
 
 declare(strict_types=1);

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @package Zest
- * @license http://opensource.org/licenses/MIT
+ * Zest
+ * @license https://opensource.org/licenses/MIT
  */
 
 declare(strict_types=1);
