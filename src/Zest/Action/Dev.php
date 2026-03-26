@@ -25,7 +25,7 @@ class Dev implements Action
 
         $configName = $this->getConfigFileName($request);
 
-        return $this->zest->project->runPackage(
+        return $this->zest->project->runExecutable(
             'vite',
             $this->getConfigArgument($configName)
         );

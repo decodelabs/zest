@@ -31,7 +31,7 @@ class Build implements Action
 
         $configName = $this->getConfigFileName($request);
 
-        return $this->zest->project->runPackage(
+        return $this->zest->project->runExecutable(
             'vite',
             'build',
             ...$this->getBuildArguments($request, $configName)

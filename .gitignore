@@ -7,4 +7,5 @@ Thumbs.db
 /phpunit.xml
 /.idea
 
+.effigy/
 effigy.json

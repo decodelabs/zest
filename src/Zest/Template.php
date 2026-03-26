@@ -39,6 +39,7 @@ class Template extends FileTemplate
         }
 
         foreach ($data as $key => $value) {
+            // @phpstan-ignore-next-line
             if ($isAssoc) {
                 $output .= str_repeat('    ', $indent);
                 $output .= var_export($key, true) . ' => ';
@@ -56,6 +57,7 @@ class Template extends FileTemplate
 
             $output .= ',';
 
+            // @phpstan-ignore-next-line
             if ($isAssoc) {
                 $output .= "\n";
             }
