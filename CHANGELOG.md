@@ -5,10 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Unreleased
+--
+
+---
+
+### [v0.9.5](https://github.com/decodelabs/zest/commits/v0.9.5) - 26th March 2026
+
 - Improved doc comment headers
 - Added AGENTS.md
 - Integrated Chorus dev dependency
 - Fixed vite call action
+
+[Full list of changes](https://github.com/decodelabs/zest/compare/v0.9.4...v0.9.5)
 
 ---
 
@@ -515,4 +523,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [v0.1.0](https://github.com/decodelabs/zest/commits/v0.1.0) - 25th November 2022
 
 - Built initial implementation
-
