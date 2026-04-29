@@ -20,6 +20,7 @@ class Generic implements Config
         protected(set) ?string $host = null,
         protected(set) ?int $port = null,
         protected(set) ?bool $https = false,
+        protected(set) ?string $origin = null,
         protected(set) string $outDir = 'dist',
         protected(set) string $assetsDir = 'assets',
         protected(set) string $publicDir = 'public',

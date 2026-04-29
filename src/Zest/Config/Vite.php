@@ -30,6 +30,7 @@ class Vite implements Config
     public protected(set) ?string $host = null;
     public protected(set) ?int $port = null;
     public protected(set) ?bool $https = false;
+    public protected(set) ?string $origin = null;
     public protected(set) string $outDir = 'dist';
     public protected(set) string $assetsDir = 'assets';
     public protected(set) string $publicDir = 'public';
@@ -112,6 +113,7 @@ class Vite implements Config
         $this->host = $tree->server->host->as('?string') ?? 'localhost';
         $this->port = $tree->server->port->as('int');
         $this->https = $tree->server->https->as('?bool') ?? false;
+        $this->origin = $tree->server->origin->as('?string');
         $this->outDir = $tree->build->outDir->as('?string') ?? 'dist';
         $this->assetsDir = $tree->build->assetsDir->as('?string') ?? 'assets';
         $this->publicDir = $tree->publicDir->as('?string') ?? 'public';
@@ -131,29 +133,43 @@ class Vite implements Config
 
     protected function loadPhpConfig(): bool
     {
-        $iota = Monarch::getService(Iota::class);
-        $repo = $iota->loadStatic('zest');
-
         $filename = preg_replace(
             '/\.(' . implode('|', self::Extensions) . ')$/',
             '.php',
             $this->file->name
         );
 
-        if (
-            !$filename ||
-            !$repo->has((string)$filename)
-        ) {
+        if (!$filename) {
             return false;
         }
 
+        $projectFile = $this->project->rootDir->getFile('.iota/zest/' . $filename);
 
+        if ($projectFile->exists()) {
+            /** @var mixed $config */
+            $config = require $projectFile->path;
 
-        $config = $repo->returnAsType($filename, Generic::class);
+            if (!$config instanceof Generic) {
+                throw Exceptional::Runtime(
+                    message: 'Invalid cached Zest config type',
+                    data: ['file' => $projectFile->path]
+                );
+            }
+        } else {
+            $iota = Monarch::getService(Iota::class);
+            $repo = $iota->loadStatic('zest');
+
+            if (!$repo->has((string)$filename)) {
+                return false;
+            }
+
+            $config = $repo->returnAsType($filename, Generic::class);
+        }
 
         $this->host = $config->host ?? 'localhost';
         $this->port = $config->port;
         $this->https = $config->https ?? false;
+        $this->origin = $config->origin;
         $this->outDir = $config->outDir;
         $this->assetsDir = $config->assetsDir;
         $this->publicDir = $config->publicDir;
@@ -170,6 +186,7 @@ class Vite implements Config
     {
         $this->host = 'localhost';
         $this->port = rand(3000, 9999);
+        $this->origin = null;
         $this->outDir = 'dist';
         $this->assetsDir = 'assets';
         $this->publicDir = 'public';

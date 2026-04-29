@@ -338,9 +338,19 @@ class Manifest
             $file = Atlas::getFile($file);
         }
 
-        $url = $config->https ? 'https' : 'http';
-        $url .= '://' . $config->host . ':' . $config->port;
-        $url .= '/' . trim((string)$config->urlPrefix, '/');
+        if ($config->origin !== null) {
+            $url = rtrim($config->origin, '/');
+        } else {
+            $url = $config->https ? 'https' : 'http';
+            $url .= '://' . $config->host . ':' . $config->port;
+        }
+
+        $prefix = trim((string)$config->urlPrefix, '/');
+
+        if ($prefix !== '') {
+            $url .= '/' . $prefix;
+        }
+
         $url = rtrim($url, '/');
 
         $output = new static($file, true);

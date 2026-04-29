@@ -120,6 +120,7 @@ Zest belongs to the **frontend** cluster, providing integration between PHP appl
 - `$config->urlPrefix` — URL prefix (readonly property)
 - `$config->entry` — Entry point file (readonly property)
 - `$config->manifestName` — Manifest file name (readonly property)
+- `$config->origin` — Public dev-server origin, used when present instead of synthesizing a URL from host, port, and https (readonly property)
 
 **Config\Vite:**
 - `new Config\Vite(Project $project, Iota $iota, ?string $configName = null)` — Constructor
@@ -127,7 +128,7 @@ Zest belongs to the **frontend** cluster, providing integration between PHP appl
 - `$config->loadDefaults(): void` — Load default configuration values
 
 **Config\Generic:**
-- `new Config\Generic(string $path, ?string $host = null, ?int $port = null, ?bool $https = false, string $outDir = 'dist', string $assetsDir = 'assets', string $publicDir = 'public', array $aliases = [], ?string $urlPrefix = null, ?string $entry = null, string $manifestName = 'manifest.json')` — Constructor
+- `new Config\Generic(string $path, ?string $host = null, ?int $port = null, ?bool $https = false, ?string $origin = null, string $outDir = 'dist', string $assetsDir = 'assets', string $publicDir = 'public', array $aliases = [], ?string $urlPrefix = null, ?string $entry = null, string $manifestName = 'manifest.json')` — Constructor
 
 **Harvest\Middleware\Zest:**
 - `new Harvest\Middleware\Zest(Iota $iota, ?array $configs = null)` — Constructor
@@ -278,6 +279,7 @@ return new Generic(
     host: 'localhost',
     port: 3000,
     https: false,
+    origin: 'https://zest.example.test',
     outDir: 'dist',
     assetsDir: 'assets',
     publicDir: 'public',
@@ -584,4 +586,3 @@ $prodManifest = Manifest::generateProduction(
   - Harvest: HTTP middleware framework
   - Horizon: Page decorator framework
   - Genesis: Build system
-

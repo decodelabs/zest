@@ -14,6 +14,7 @@ interface Config
     public ?string $host { get; }
     public ?int $port { get; }
     public ?bool $https { get; }
+    public ?string $origin { get; }
 
     public string $path { get; }
     public string $outDir { get; }
