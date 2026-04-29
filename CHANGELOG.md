@@ -5,7 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Unreleased
+--
+
+---
+
+### [v0.9.6](https://github.com/decodelabs/zest/commits/v0.9.6) - 29th April 2026
+
 - Prefer `server.origin` over synthesized `host` / `port` / `https` values when generating the cached dev manifest, so reverse-proxied Vite setups can publish the correct public asset URL.
+
+[Full list of changes](https://github.com/decodelabs/zest/compare/v0.9.5...v0.9.6)
 
 ---
 
