@@ -133,38 +133,25 @@ class Vite implements Config
 
     protected function loadPhpConfig(): bool
     {
+        $iota = Monarch::getService(Iota::class);
+        $repo = $iota->loadStatic('zest');
+
         $filename = preg_replace(
             '/\.(' . implode('|', self::Extensions) . ')$/',
             '.php',
             $this->file->name
         );
 
-        if (!$filename) {
+        if (
+            !$filename ||
+            !$repo->has((string)$filename)
+        ) {
             return false;
         }
 
-        $projectFile = $this->project->rootDir->getFile('.iota/zest/' . $filename);
 
-        if ($projectFile->exists()) {
-            /** @var mixed $config */
-            $config = require $projectFile->path;
 
-            if (!$config instanceof Generic) {
-                throw Exceptional::Runtime(
-                    message: 'Invalid cached Zest config type',
-                    data: ['file' => $projectFile->path]
-                );
-            }
-        } else {
-            $iota = Monarch::getService(Iota::class);
-            $repo = $iota->loadStatic('zest');
-
-            if (!$repo->has((string)$filename)) {
-                return false;
-            }
-
-            $config = $repo->returnAsType($filename, Generic::class);
-        }
+        $config = $repo->returnAsType($filename, Generic::class);
 
         $this->host = $config->host ?? 'localhost';
         $this->port = $config->port;
