@@ -16,19 +16,19 @@ use DecodeLabs\Zest\Config;
 class Generic implements Config
 {
     public function __construct(
-        protected(set) string $path,
-        protected(set) ?string $host = null,
-        protected(set) ?int $port = null,
-        protected(set) ?bool $https = false,
-        protected(set) ?string $origin = null,
-        protected(set) string $outDir = 'dist',
-        protected(set) string $assetsDir = 'assets',
-        protected(set) string $publicDir = 'public',
+        public protected(set) string $path,
+        public protected(set) ?string $host = null,
+        public protected(set) ?int $port = null,
+        public protected(set) ?bool $https = false,
+        public protected(set) ?string $origin = null,
+        public protected(set) string $outDir = 'dist',
+        public protected(set) string $assetsDir = 'assets',
+        public protected(set) string $publicDir = 'public',
         /** @var array<string,string> */
-        protected(set) array $aliases = [],
-        protected(set) ?string $urlPrefix = null,
-        protected(set) ?string $entry = null,
-        protected(set) string $manifestName = 'manifest.json',
+        public protected(set) array $aliases = [],
+        public protected(set) ?string $urlPrefix = null,
+        public protected(set) ?string $entry = null,
+        public protected(set) string $manifestName = 'manifest.json',
     ) {
         $path = Monarch::getPaths()->run;
 

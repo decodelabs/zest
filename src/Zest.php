@@ -16,7 +16,7 @@ use DecodeLabs\Zest\Config\Vite as ViteConfig;
 class Zest extends Clip
 {
     public function __construct(
-        protected(set) Project $project,
+        public protected(set) Project $project,
         protected Archetype $archetype,
         protected Iota $iota,
         protected Session $io
